@@ -3,17 +3,14 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Haven Harmony images
 import hhHero from "@/assets/projects/havenharmony/hero.png";
 import hhDashboard from "@/assets/projects/havenharmony/dashboard.png";
 import hhRooms from "@/assets/projects/havenharmony/rooms.png";
 
-// Savvy Wallet images
 import swCharts from "@/assets/projects/savvywallet/charts.png";
 import swLogin from "@/assets/projects/savvywallet/login.png";
 import swTransactions from "@/assets/projects/savvywallet/transactions.png";
 
-// Aniverse Canvas images
 import anHero from "@/assets/projects/aniverse/hero.png";
 import anGenres from "@/assets/projects/aniverse/genres.png";
 import anTrending from "@/assets/projects/aniverse/trending.png";
@@ -64,14 +61,18 @@ function ImageCarousel({ images }: { images: string[] }) {
   return (
     <div className="relative aspect-[3/2] overflow-hidden bg-secondary">
       {images.map((src, i) => (
-        <img
+        <motion.img
           key={src}
           src={src}
           alt=""
           loading="lazy"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-            i === current ? "opacity-100" : "opacity-0"
-          }`}
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={false}
+          animate={{
+            opacity: i === current ? 1 : 0,
+            scale: i === current ? 1 : 1.05,
+          }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
         />
       ))}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
@@ -79,16 +80,32 @@ function ImageCarousel({ images }: { images: string[] }) {
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              i === current ? "bg-primary" : "bg-foreground/30"
-            }`}
+            className="relative w-2 h-2 rounded-full overflow-hidden bg-foreground/30"
             aria-label={`Go to slide ${i + 1}`}
-          />
+          >
+            {i === current && (
+              <motion.div
+                className="absolute inset-0 bg-primary rounded-full"
+                layoutId="carousel-dot"
+                transition={{ duration: 0.3 }}
+              />
+            )}
+          </button>
         ))}
       </div>
     </div>
   );
 }
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 60, rotateX: -10 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { duration: 0.7, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
 
 export default function ProjectsSection() {
   return (
@@ -96,37 +113,46 @@ export default function ProjectsSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Featured Work</h2>
           <p className="mt-3 text-muted-foreground">A selection of projects I've built</p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: "1200px" }}>
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
-              className="group rounded-xl border border-border bg-card overflow-hidden hover:shadow-xl transition-shadow duration-300"
-              style={{ perspective: "800px" }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              className="group rounded-xl border border-border bg-card overflow-hidden"
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              whileHover={{ rotateY: 2, rotateX: -2, scale: 1.02 }}
+              custom={i}
+              whileHover={{
+                y: -12,
+                rotateY: 3,
+                rotateX: -3,
+                scale: 1.03,
+                boxShadow: "0 25px 50px -20px hsl(var(--primary) / 0.2)",
+              }}
+              transition={{ duration: 0.3 }}
             >
               <ImageCarousel images={project.images} />
               <div className="p-5">
                 <h3 className="font-display text-lg font-semibold text-foreground">{project.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{project.description}</p>
-                <Button asChild variant="outline" size="sm" className="mt-4 rounded-full w-full">
-                  <a href={project.link} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-2 h-3.5 w-3.5" />
-                    Live Demo
-                  </a>
-                </Button>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button asChild variant="outline" size="sm" className="mt-4 rounded-full w-full">
+                    <a href={project.link} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                      Live Demo
+                    </a>
+                  </Button>
+                </motion.div>
               </div>
             </motion.div>
           ))}

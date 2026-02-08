@@ -17,6 +17,16 @@ const socials = [
   { icon: Linkedin, href: "https://www.linkedin.com/in/eddy-casas-72a07b364/", label: "LinkedIn" },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
+
 export default function ContactSection() {
   const { toast } = useToast();
   const [sending, setSending] = useState(false);
@@ -43,10 +53,10 @@ export default function ContactSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Get In Touch</h2>
           <p className="mt-3 text-muted-foreground">Have a project in mind? Let's talk.</p>
@@ -55,18 +65,21 @@ export default function ContactSection() {
         <div className="grid md:grid-cols-2 gap-10">
           {/* Info */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="space-y-8"
           >
             <div className="space-y-5">
               {info.map(({ icon: Icon, label, href }) => (
-                <div key={label} className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
+                <motion.div key={label} className="flex items-center gap-4" variants={itemVariants}>
+                  <motion.div
+                    className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10"
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                  >
                     <Icon className="w-5 h-5 text-primary" />
-                  </div>
+                  </motion.div>
                   {href ? (
                     <a href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                       {label}
@@ -74,42 +87,52 @@ export default function ContactSection() {
                   ) : (
                     <span className="text-sm text-muted-foreground">{label}</span>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
 
-            <div className="flex gap-3">
+            <motion.div className="flex gap-3" variants={itemVariants}>
               {socials.map(({ icon: Icon, href, label }) => (
-                <a
+                <motion.a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 rounded-lg border border-border hover:bg-secondary transition-colors"
                   aria-label={label}
+                  whileHover={{ scale: 1.15, y: -3 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <Icon className="w-5 h-5" />
-                </a>
+                </motion.a>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Form */}
           <motion.form
             onSubmit={handleSubmit}
             className="space-y-4"
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <Input name="name" placeholder="Your Name" required className="rounded-lg" />
-            <Input name="email" type="email" placeholder="Your Email" required className="rounded-lg" />
-            <Textarea name="message" placeholder="Your Message" rows={5} required className="rounded-lg resize-none" />
-            <Button type="submit" disabled={sending} className="rounded-full w-full font-semibold">
-              <Send className="mr-2 h-4 w-4" />
-              {sending ? "Sending..." : "Send Message"}
-            </Button>
+            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
+              <Input name="name" placeholder="Your Name" required className="rounded-lg" />
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
+              <Input name="email" type="email" placeholder="Your Email" required className="rounded-lg" />
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
+              <Textarea name="message" placeholder="Your Message" rows={5} required className="rounded-lg resize-none" />
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Button type="submit" disabled={sending} className="rounded-full w-full font-semibold shadow-lg shadow-primary/20">
+                <Send className="mr-2 h-4 w-4" />
+                {sending ? "Sending..." : "Send Message"}
+              </Button>
+            </motion.div>
           </motion.form>
         </div>
       </div>
