@@ -21,14 +21,21 @@ export default function ContactSection() {
   const { toast } = useToast();
   const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      toast({ title: "Message sent!", description: "Thanks for reaching out. I'll get back to you soon." });
-      (e.target as HTMLFormElement).reset();
-    }, 1200);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+
+    const mailtoLink = `mailto:yddecsasas21@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
+    window.open(mailtoLink, "_blank");
+
+    setSending(false);
+    toast({ title: "Message ready!", description: "Your email client should open. Send the email to complete." });
+    form.reset();
   };
 
   return (
