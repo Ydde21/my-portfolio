@@ -28,21 +28,21 @@ const projects: Project[] = [
     description:
       "A comprehensive hotel management system with booking, room management, and guest services features. Built for seamless hospitality operations.",
     images: [hhHero, hhDashboard, hhRooms],
-    link: "#",
+    link: "https://havenharmony.lovable.app",
   },
   {
     title: "Savvy Wallet",
     description:
       "A smart finance and expense tracker that helps users manage budgets, track spending, and visualize financial goals with intuitive charts.",
     images: [swCharts, swLogin, swTransactions],
-    link: "#",
+    link: "https://savvy-wallet.lovable.app",
   },
   {
     title: "Aniverse Canvas",
     description:
       "An anime art platform where artists can showcase, share, and discover artwork. Features galleries, community interactions, and curated collections.",
     images: [anHero, anGenres, anTrending],
-    link: "#",
+    link: "https://aniverse-canvas.lovable.app",
   },
 ];
 
@@ -103,7 +103,11 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     rotateX: 0,
-    transition: { duration: 0.7, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: {
+      duration: 0.7,
+      delay: i * 0.15,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
   }),
 };
 
@@ -118,11 +122,18 @@ export default function ProjectsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Featured Work</h2>
-          <p className="mt-3 text-muted-foreground">A selection of projects I've built</p>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
+            Featured Work
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            A selection of projects I've built
+          </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: "1200px" }}>
+        <div
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          style={{ perspective: "1200px" }}
+        >
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
@@ -143,11 +154,27 @@ export default function ProjectsSection() {
             >
               <ImageCarousel images={project.images} />
               <div className="p-5">
-                <h3 className="font-display text-lg font-semibold text-foreground">{project.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{project.description}</p>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button asChild variant="outline" size="sm" className="mt-4 rounded-full w-full">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer">
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {project.title}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {project.description}
+                </p>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="mt-4 rounded-full w-full"
+                  >
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink className="mr-2 h-3.5 w-3.5" />
                       Live Demo
                     </a>
