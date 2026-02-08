@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { motion, AnimatePresence } from "framer-motion";
+import logo3d from "@/assets/logo-3d.png";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -20,8 +21,11 @@ export default function Navbar() {
       style={{ background: "var(--nav-blur)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
     >
       <div className="mx-auto max-w-6xl flex items-center justify-between px-5 py-4">
-        <a href="#home" className="font-display text-2xl font-bold tracking-tight text-foreground">
-          EC<span className="text-primary">.</span>
+        <a href="#home" className="flex items-center gap-2">
+          <img src={logo3d} alt="Eddy Casas" className="w-9 h-9 rounded-full object-cover" />
+          <span className="font-display text-xl font-bold tracking-tight text-foreground">
+            EC<span className="text-primary">.</span>
+          </span>
         </a>
 
         {/* Desktop links */}

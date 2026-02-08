@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 const info = [
-  { icon: Mail, label: "eddycasas21@gmail.com", href: "mailto:eddycasas21@gmail.com" },
-  { icon: Phone, label: "+63 956-846-6498", href: "tel:+639568466498" },
-  { icon: MapPin, label: "Quezon City, Philippines", href: null },
+  { icon: Mail, label: "yddecsasas21@gmail.com", href: "mailto:yddecsasas21@gmail.com" },
+  { icon: Phone, label: "+63 918-552-5352", href: "tel:+639185525352" },
+  { icon: MapPin, label: "Bacolod City, Philippines", href: null },
 ];
 
 const socials = [
