@@ -1,7 +1,7 @@
 const techs = [
-  "React", "TypeScript", "Next.js", "Node.js", "Tailwind CSS", "MongoDB",
-  "PostgreSQL", "Python", "Firebase", "Git", "REST APIs", "GraphQL",
-  "Docker", "Supabase", "Prisma", "Framer Motion",
+  "React", "TypeScript", "Next.js", "Node.js", "Tailwind CSS",
+  "PostgreSQL", "ASP.NET Core Web API", "Git", "REST APIs",
+  "Supabase", "Vercel", "HTML5", "CSS3",
 ];
 
 function MarqueeRow({ reverse = false }: { reverse?: boolean }) {

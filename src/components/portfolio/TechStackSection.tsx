@@ -4,17 +4,17 @@ const categories = [
   {
     title: "Frontend",
     color: "bg-primary",
-    items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "HTML5", "CSS3"],
+    items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5", "CSS3"],
   },
   {
     title: "Backend",
     color: "bg-accent",
-    items: ["Node.js", "Python", "Express", "REST APIs", "GraphQL", "Prisma"],
+    items: ["Node.js", "ASP.NET Core Web API", "REST APIs"],
   },
   {
     title: "Database & Cloud",
     color: "bg-primary",
-    items: ["PostgreSQL", "MongoDB", "Firebase", "Supabase", "Docker", "Vercel", "AWS"],
+    items: ["PostgreSQL", "Supabase", "Vercel"],
   },
 ];
 
