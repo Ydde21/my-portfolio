@@ -65,15 +65,15 @@ export default function ContactSection() {
         <div className="grid md:grid-cols-2 gap-10">
           {/* Info */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
             className="space-y-8"
           >
             <div className="space-y-5">
               {info.map(({ icon: Icon, label, href }) => (
-                <motion.div key={label} className="flex items-center gap-4" variants={itemVariants}>
+                <motion.div key={label} className="flex items-center gap-4">
                   <motion.div
                     className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10"
                     whileHover={{ scale: 1.15, rotate: 5 }}
@@ -91,7 +91,7 @@ export default function ContactSection() {
               ))}
             </div>
 
-            <motion.div className="flex gap-3" variants={itemVariants}>
+            <motion.div className="flex gap-3">
               {socials.map(({ icon: Icon, href, label }) => (
                 <motion.a
                   key={label}
