@@ -198,17 +198,6 @@ export default function HeroSection() {
           Passionate about turning complex problems into elegant digital solutions.
         </motion.p>
 
-        {/* Stats */}
-        <motion.div className="mt-8 flex justify-center gap-8 sm:gap-12" variants={fadeUp}>
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="font-display text-2xl sm:text-3xl font-bold text-primary">
-                <AnimatedNumber target={s.value} />
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
-            </div>
-          ))}
-        </motion.div>
 
         <motion.div
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
