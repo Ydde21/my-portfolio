@@ -60,29 +60,31 @@ function AnimatedNumber({ target }: { target: number }) {
 function Typewriter({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
   const [text, setText] = useState("");
-  const [deleting, setDeleting] = useState(false);
+  const [phase, setPhase] = useState<"typing" | "pausing" | "deleting">("typing");
 
   useEffect(() => {
     const word = words[index];
-    const speed = deleting ? 40 : 80;
 
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        setText(word.slice(0, text.length + 1));
-        if (text.length + 1 === word.length) {
-          setTimeout(() => setDeleting(true), 1800);
-        }
+    if (phase === "typing") {
+      if (text.length < word.length) {
+        const t = setTimeout(() => setText(word.slice(0, text.length + 1)), 80);
+        return () => clearTimeout(t);
       } else {
-        setText(word.slice(0, text.length - 1));
-        if (text.length === 0) {
-          setDeleting(false);
-          setIndex((i) => (i + 1) % words.length);
-        }
+        const t = setTimeout(() => setPhase("deleting"), 2000);
+        return () => clearTimeout(t);
       }
-    }, speed);
+    }
 
-    return () => clearTimeout(timeout);
-  }, [text, deleting, index, words]);
+    if (phase === "deleting") {
+      if (text.length > 0) {
+        const t = setTimeout(() => setText(text.slice(0, -1)), 40);
+        return () => clearTimeout(t);
+      } else {
+        setIndex((i) => (i + 1) % words.length);
+        setPhase("typing");
+      }
+    }
+  }, [text, phase, index, words]);
 
   return (
     <span>
