@@ -3,12 +3,26 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Haven Harmony images
+import hhHero from "@/assets/projects/havenharmony/hero.png";
+import hhDashboard from "@/assets/projects/havenharmony/dashboard.png";
+import hhRooms from "@/assets/projects/havenharmony/rooms.png";
+
+// Savvy Wallet images
+import swCharts from "@/assets/projects/savvywallet/charts.png";
+import swLogin from "@/assets/projects/savvywallet/login.png";
+import swTransactions from "@/assets/projects/savvywallet/transactions.png";
+
+// Aniverse Canvas images
+import anHero from "@/assets/projects/aniverse/hero.png";
+import anGenres from "@/assets/projects/aniverse/genres.png";
+import anTrending from "@/assets/projects/aniverse/trending.png";
+
 interface Project {
   title: string;
   description: string;
   images: string[];
   link: string;
-  tags: string[];
 }
 
 const projects: Project[] = [
@@ -16,37 +30,22 @@ const projects: Project[] = [
     title: "Haven Harmony",
     description:
       "A comprehensive hotel management system with booking, room management, and guest services features. Built for seamless hospitality operations.",
-    images: [
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&h=400&fit=crop",
-    ],
+    images: [hhHero, hhDashboard, hhRooms],
     link: "#",
-    tags: ["React", "Node.js", "MongoDB", "Express"],
   },
   {
     title: "Savvy Wallet",
     description:
       "A smart finance and expense tracker that helps users manage budgets, track spending, and visualize financial goals with intuitive charts.",
-    images: [
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&h=400&fit=crop",
-    ],
+    images: [swCharts, swLogin, swTransactions],
     link: "#",
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
   },
   {
     title: "Aniverse Canvas",
     description:
       "An anime art platform where artists can showcase, share, and discover artwork. Features galleries, community interactions, and curated collections.",
-    images: [
-      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1541562232579-512a21360020?w=600&h=400&fit=crop",
-    ],
+    images: [anHero, anGenres, anTrending],
     link: "#",
-    tags: ["React", "Firebase", "Tailwind CSS", "Framer Motion"],
   },
 ];
 
@@ -122,16 +121,6 @@ export default function ProjectsSection() {
               <div className="p-5">
                 <h3 className="font-display text-lg font-semibold text-foreground">{project.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{project.description}</p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 text-[11px] font-medium rounded bg-primary/10 text-primary"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
                 <Button asChild variant="outline" size="sm" className="mt-4 rounded-full w-full">
                   <a href={project.link} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-3.5 w-3.5" />
