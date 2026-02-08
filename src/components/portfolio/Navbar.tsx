@@ -21,11 +21,8 @@ export default function Navbar() {
       style={{ background: "var(--nav-blur)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
     >
       <div className="mx-auto max-w-6xl flex items-center justify-between px-5 py-4">
-        <a href="#home" className="flex items-center gap-2">
+        <a href="#home" className="flex items-center">
           <img src={logo3d} alt="Eddy Casas" className="w-9 h-9 rounded-full object-cover" />
-          <span className="font-display text-xl font-bold tracking-tight text-foreground">
-            EC<span className="text-primary">.</span>
-          </span>
         </a>
 
         {/* Desktop links */}
