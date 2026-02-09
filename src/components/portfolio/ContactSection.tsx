@@ -36,16 +36,40 @@ export default function ContactSection() {
     setSending(true);
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const message = formData.get("message") as string;
+    
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      message: formData.get("message") as string,
+    };
 
-    const mailtoLink = `mailto:yddecsasas21@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
-    window.open(mailtoLink, "_blank");
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    setSending(false);
-    toast({ title: "Message ready!", description: "Your email client should open. Send the email to complete." });
-    form.reset();
+      if (response.ok) {
+        toast({ 
+          title: "Message sent!", 
+          description: "Thank you for reaching out. I'll get back to you soon!" 
+        });
+        form.reset();
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send message');
+      }
+    } catch (err) {
+      console.error('Error sending message:', err);
+      toast({ 
+        title: "Error", 
+        description: "Something went wrong. Please try again or email me directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
