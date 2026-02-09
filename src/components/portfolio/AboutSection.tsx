@@ -119,7 +119,7 @@ export default function AboutSection() {
               asChild
             >
               <a
-                href="/EddyCasasResume.pdf"
+                href="/CasasEddy.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >

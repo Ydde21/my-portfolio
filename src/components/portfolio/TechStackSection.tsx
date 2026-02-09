@@ -18,7 +18,7 @@ const categories = [
   {
     title: "Backend",
     color: "bg-accent",
-    items: ["Node.js", "ASP.NET Core Web API", "REST APIs"],
+    items: ["Node.js", "ASP.NET Core Web API", "REST APIs", "PHP"],
   },
   {
     title: "Database & Cloud",

@@ -17,6 +17,7 @@ const techs = [
   "SQL Server",
   "Microsoft Azure",
   "Vite",
+  "PHP",
 ];
 
 function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
