@@ -7,9 +7,9 @@ import hhHero from "@/assets/projects/havenharmony/hero.png";
 import hhDashboard from "@/assets/projects/havenharmony/dashboard.png";
 import hhRooms from "@/assets/projects/havenharmony/rooms.png";
 
-import swCharts from "@/assets/projects/savvywallet/charts.png";
+import swCharts from "@/assets/projects/savvywallet/chart.png";
 import swLogin from "@/assets/projects/savvywallet/login.png";
-import swTransactions from "@/assets/projects/savvywallet/transactions.png";
+import swTransactions from "@/assets/projects/savvywallet/entry.png";
 
 import anHero from "@/assets/projects/aniverse/hero.png";
 import anGenres from "@/assets/projects/aniverse/genres.png";
@@ -20,7 +20,6 @@ interface Project {
   description: string;
   images: string[];
   link: string;
-  tags: string[];
 }
 
 const projects: Project[] = [
@@ -30,7 +29,7 @@ const projects: Project[] = [
       "A comprehensive hotel management system with booking, room management, and guest services features. Built for seamless hospitality operations.",
     images: [hhHero, hhDashboard, hhRooms],
     link: "https://havenharmony.lovable.app",
-    tags: ["React", "TypeScript", "Supabase", "Tailwind CSS"],
+    
   },
   {
     title: "Savvy Wallet",
@@ -38,7 +37,7 @@ const projects: Project[] = [
       "A smart finance and expense tracker that helps users manage budgets, track spending, and visualize financial goals with intuitive charts.",
     images: [swCharts, swLogin, swTransactions],
     link: "https://savvy-wallet.lovable.app",
-    tags: ["React", "Recharts", "TypeScript", "Supabase"],
+   
   },
   {
     title: "Aniverse Canvas",
@@ -46,7 +45,7 @@ const projects: Project[] = [
       "An anime art platform where artists can showcase, share, and discover artwork. Features galleries, community interactions, and curated collections.",
     images: [anHero, anGenres, anTrending],
     link: "https://aniverse-canvas.lovable.app",
-    tags: ["React", "Framer Motion", "TypeScript", "Tailwind CSS"],
+    
   },
 ];
 
@@ -164,20 +163,6 @@ export default function ProjectsSection() {
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                   {project.description}
                 </p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {project.tags.map((tag, ti) => (
-                    <motion.span
-                      key={tag}
-                      className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-primary/10 text-primary border border-primary/20"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: ti * 0.05 + 0.3, duration: 0.3 }}
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </div>
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
