@@ -151,6 +151,17 @@ const stats = [
 export default function HeroSection() {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 px-5">
+      {/* Aurora gradient mesh background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] opacity-[0.07]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 50%, hsl(var(--primary)) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, hsl(var(--accent)) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, hsl(var(--primary)) 0%, transparent 50%)",
+            animation: "aurora 12s ease-in-out infinite alternate",
+          }}
+        />
+      </div>
       <Particles />
       <FloatingShapes />
 
@@ -161,8 +172,15 @@ export default function HeroSection() {
         animate="show"
       >
         <motion.div variants={fadeUp}>
-          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase border border-primary/30 rounded-full text-primary bg-primary/5">
+          <span className="inline-flex items-center gap-3 px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase border border-primary/30 rounded-full text-primary bg-primary/5">
             Full Stack Developer
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              Available for Hire
+            </span>
           </span>
         </motion.div>
 
