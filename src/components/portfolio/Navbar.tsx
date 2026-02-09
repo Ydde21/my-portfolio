@@ -6,7 +6,9 @@ import logo3d from "@/assets/logo-3d.png";
 
 const links = [
   { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
   { label: "Tech Stack", href: "#tech" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];

@@ -127,3 +127,9 @@
   0% { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
+
+@keyframes aurora {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-3%, 2%) rotate(3deg); }
+  100% { transform: translate(1%, -1%) rotate(-2deg); }
+}
