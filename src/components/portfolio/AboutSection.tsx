@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Download } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo3d from "@/assets/logo-3d.png";
 
-function AnimatedStat({ value, label }: { value: number; label: string }) {
+function AnimatedStat({ value, label, decimals = 0 }: { value: number; label: string; decimals?: number }) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v));
-  const [display, setDisplay] = useState(0);
+  const rounded = useTransform(count, (v) => decimals > 0 ? parseFloat(v.toFixed(decimals)) : Math.round(v));
+  const [display, setDisplay] = useState<number>(0);
   const [triggered, setTriggered] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function AnimatedStat({ value, label }: { value: number; label: string }) {
 }
 
 const stats = [
-  { value: 3, label: "Years Coding" },
+  { value: 1.5, label: "Years Coding", decimals: 1 },
   { value: 10, label: "Projects Built" },
   { value: 13, label: "Technologies" },
 ];
@@ -101,21 +101,27 @@ export default function AboutSection() {
           {/* Stats */}
           <div className="mt-8 grid grid-cols-3 gap-4">
             {stats.map((s) => (
-              <AnimatedStat key={s.label} value={s.value} label={s.label} />
+              <AnimatedStat key={s.label} value={s.value} label={s.label} decimals={s.decimals} />
             ))}
           </div>
 
           {/* Resume button */}
           <motion.div className="mt-8" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Button size="lg" className="rounded-full px-8 font-semibold shadow-lg shadow-primary/25">
-              <motion.span
-                className="mr-2 inline-flex"
-                animate={{ y: [0, -3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <Download className="h-4 w-4" />
-              </motion.span>
-              Download Resume
+            <Button
+              size="lg"
+              className="rounded-full px-8 font-semibold shadow-lg shadow-primary/25"
+              asChild
+            >
+              <a href="/EddyCasasResume.pdf" target="_blank" rel="noopener noreferrer">
+                <motion.span
+                  className="mr-2 inline-flex"
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Eye className="h-4 w-4" />
+                </motion.span>
+                View Resume
+              </a>
             </Button>
           </motion.div>
         </motion.div>
