@@ -3,27 +3,18 @@ import { Code, Rocket, Users, Award } from "lucide-react";
 
 const milestones = [
   {
-    year: "2021",
+    year: "2020",
     title: "Started Coding Journey",
-    description: "Dove into web development, learning HTML, CSS, JavaScript and building first projects.",
     icon: Code,
   },
   {
-    year: "2022",
-    title: "First Freelance Project",
-    description: "Delivered a full-stack web app for a client, solidifying real-world development skills.",
-    icon: Rocket,
-  },
-  {
-    year: "2023",
-    title: "Built 10+ Applications",
-    description: "Expanded portfolio with diverse projects spanning finance, hospitality, and creative platforms.",
+    year: "2024",
+    title: "Jr. Web/App Developer",
     icon: Users,
   },
   {
-    year: "2024",
+    year: "2026",
     title: "Full Stack Specialist",
-    description: "Mastered modern frameworks and became proficient in end-to-end application development.",
     icon: Award,
   },
 ];
@@ -48,9 +39,11 @@ export default function ExperienceTimeline() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
-            My Journey
+            My Professional Journey
           </h2>
-          <p className="mt-3 text-muted-foreground">Key milestones along the way</p>
+          <p className="mt-3 text-muted-foreground">
+            Key milestones along the way
+          </p>
         </motion.div>
 
         <div className="relative">
@@ -78,7 +71,11 @@ export default function ExperienceTimeline() {
                   initial={{ opacity: 0, x: isLeft ? -60 : 60 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  transition={{
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
                 >
                   {/* Glowing dot */}
                   <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10">
@@ -104,11 +101,14 @@ export default function ExperienceTimeline() {
                       className="rounded-xl border border-border bg-card p-5 shadow-sm"
                       whileHover={{
                         y: -4,
-                        boxShadow: "0 12px 30px -10px hsl(var(--primary) / 0.15)",
+                        boxShadow:
+                          "0 12px 30px -10px hsl(var(--primary) / 0.15)",
                       }}
                       transition={{ duration: 0.25 }}
                     >
-                      <div className={`flex items-center gap-3 ${isLeft ? "md:justify-end" : ""}`}>
+                      <div
+                        className={`flex items-center gap-3 ${isLeft ? "md:justify-end" : ""}`}
+                      >
                         <div className="p-2 rounded-lg bg-primary/10">
                           <Icon className="h-4 w-4 text-primary" />
                         </div>
@@ -119,9 +119,6 @@ export default function ExperienceTimeline() {
                       <h3 className="mt-3 font-display text-lg font-semibold text-foreground">
                         {m.title}
                       </h3>
-                      <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                        {m.description}
-                      </p>
                     </motion.div>
                   </div>
                 </motion.div>

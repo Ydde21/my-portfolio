@@ -4,9 +4,19 @@ import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo3d from "@/assets/logo-3d.png";
 
-function AnimatedStat({ value, label, decimals = 0 }: { value: number; label: string; decimals?: number }) {
+function AnimatedStat({
+  value,
+  label,
+  decimals = 0,
+}: {
+  value: number;
+  label: string;
+  decimals?: number;
+}) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => decimals > 0 ? parseFloat(v.toFixed(decimals)) : Math.round(v));
+  const rounded = useTransform(count, (v) =>
+    decimals > 0 ? parseFloat(v.toFixed(decimals)) : Math.round(v),
+  );
   const [display, setDisplay] = useState<number>(0);
   const [triggered, setTriggered] = useState(false);
 
@@ -34,12 +44,6 @@ function AnimatedStat({ value, label, decimals = 0 }: { value: number; label: st
   );
 }
 
-const stats = [
-  { value: 1.5, label: "Years Coding", decimals: 1 },
-  { value: 10, label: "Projects Built" },
-  { value: 13, label: "Technologies" },
-];
-
 const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.15 } },
@@ -47,12 +51,21 @@ const containerVariants = {
 
 const fadeLeft = {
   hidden: { opacity: 0, x: -60 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
 };
 
 const fadeRight = {
   hidden: { opacity: 0, x: 60, filter: "blur(6px)" },
-  visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
 };
 
 export default function AboutSection() {
@@ -88,31 +101,28 @@ export default function AboutSection() {
             About Me
           </h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            I'm a passionate full-stack developer who loves turning ideas into polished digital
-            experiences. With a strong focus on modern web technologies and clean architecture,
-            I build applications that are not only functional but delightful to use.
+            I'm a passionate full-stack developer who loves turning ideas into
+            polished digital experiences. With a strong focus on modern web
+            technologies and clean architecture, I build applications that are
+            not only functional but delightful to use.
           </p>
-          <p className="mt-3 text-muted-foreground leading-relaxed">
-            When I'm not coding, you'll find me exploring new frameworks, contributing to open
-            source, or sketching out UI concepts. I believe great software starts with empathy
-            for the end user.
-          </p>
-
-          {/* Stats */}
-          <div className="mt-8 grid grid-cols-3 gap-4">
-            {stats.map((s) => (
-              <AnimatedStat key={s.label} value={s.value} label={s.label} decimals={s.decimals} />
-            ))}
-          </div>
 
           {/* Resume button */}
-          <motion.div className="mt-8" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+          <motion.div
+            className="mt-8"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
             <Button
               size="lg"
               className="rounded-full px-8 font-semibold shadow-lg shadow-primary/25"
               asChild
             >
-              <a href="/EddyCasasResume.pdf" target="_blank" rel="noopener noreferrer">
+              <a
+                href="/EddyCasasResume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <motion.span
                   className="mr-2 inline-flex"
                   animate={{ y: [0, -3, 0] }}
