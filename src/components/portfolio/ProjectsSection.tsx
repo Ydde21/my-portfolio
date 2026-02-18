@@ -206,6 +206,18 @@ function ProjectCardMobile({
             </Badge>
           ))}
         </div>
+        <div className="mt-4">
+          <Button asChild size="sm" className="rounded-full">
+            <a
+              href={project.downloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ExternalLink className="mr-2 h-3.5 w-3.5" />
+              Download App
+            </a>
+          </Button>
+        </div>
       </div>
     </motion.article>
   );

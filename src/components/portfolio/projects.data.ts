@@ -48,6 +48,7 @@ export interface MobileProject extends BaseProject {
   platforms: Array<"iOS" | "Android">;
   screenshots: ProjectScreenshot[];
   storeLinks: ProjectLinkSet;
+  downloadUrl: string;
   caseStudyUrl: string;
 }
 
@@ -55,24 +56,25 @@ export type PortfolioProject = WebProject | MobileProject;
 
 export const projects: PortfolioProject[] = [
   {
-    title: "TaskOrbit Mobile",
+    title: "SaveWise",
     description:
-      "A productivity app focused on habit tracking, daily planning, and progress insights with a clean, distraction-free mobile experience.",
+      "A financial tracker app that helps users monitor income, expenses, savings, and loans with clear dashboards and actionable insights.",
     kind: "mobile",
     featured: true,
     platforms: ["iOS", "Android"],
     screenshots: [
-      { src: tmHome, alt: "TaskOrbit mobile home dashboard" },
-      { src: tmTasks, alt: "TaskOrbit mobile task planning view" },
+      { src: tmHome, alt: "SaveWise mobile home dashboard" },
+      { src: tmTasks, alt: "SaveWise mobile task planning view" },
       {
         src: tmInsights,
-        alt: "TaskOrbit mobile analytics and insights screen",
+        alt: "SaveWise mobile analytics and insights screen",
       },
     ],
     storeLinks: {
       appStore: "https://apps.apple.com/us/genre/ios-productivity/id6007",
       googlePlay: "https://play.google.com/store/apps/category/PRODUCTIVITY",
     },
+    downloadUrl: "https://github.com/Ydde21/SaveWise/releases/tag/SaveWise",
     caseStudyUrl: "https://savvy-wallet.lovable.app",
   },
   {
