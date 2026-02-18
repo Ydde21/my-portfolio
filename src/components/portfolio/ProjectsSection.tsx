@@ -30,6 +30,8 @@ function ProjectCarousel({
 }) {
   const [current, setCurrent] = useState(0);
   const hasMultipleSlides = slides.length > 1;
+  const isMobile = mode === "mobile";
+  const mobileStatusBarCrop = 46;
 
   const next = useCallback(() => {
     if (!hasMultipleSlides) {
@@ -58,7 +60,19 @@ function ProjectCarousel({
           src={slide.src}
           alt={slide.alt}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
+          className={
+            isMobile
+              ? "absolute inset-x-0 w-full object-cover"
+              : "absolute inset-0 h-full w-full object-cover"
+          }
+          style={
+            isMobile
+              ? {
+                  top: `-${mobileStatusBarCrop}px`,
+                  height: `calc(100% + ${mobileStatusBarCrop}px)`,
+                }
+              : undefined
+          }
           initial={false}
           animate={{
             opacity: i === current ? 1 : 0,
@@ -192,58 +206,6 @@ function ProjectCardMobile({
             </Badge>
           ))}
         </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.storeLinks.appStore && (
-            <Button asChild size="sm" className="rounded-full">
-              <a
-                href={project.storeLinks.appStore}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Apple className="mr-2 h-3.5 w-3.5" />
-                App Store
-              </a>
-            </Button>
-          )}
-
-          {project.storeLinks.googlePlay && (
-            <Button asChild size="sm" className="rounded-full">
-              <a
-                href={project.storeLinks.googlePlay}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Play className="mr-2 h-3.5 w-3.5" />
-                Google Play
-              </a>
-            </Button>
-          )}
-
-          <Button
-            asChild
-            size="sm"
-            variant={hasStoreLinks ? "outline" : "default"}
-            className="rounded-full"
-          >
-            <a
-              href={project.caseStudyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FileText className="mr-2 h-3.5 w-3.5" />
-              Case Study
-            </a>
-          </Button>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.tech.map((tech) => (
-            <Badge key={tech} variant="outline" className="rounded-full">
-              {tech}
-            </Badge>
-          ))}
-        </div>
       </div>
     </motion.article>
   );
@@ -273,7 +235,11 @@ function ProjectCardWeb({
       }}
       transition={{ duration: 0.3 }}
     >
-      <ProjectCarousel slides={project.images} mode={project.kind} title={project.title} />
+      <ProjectCarousel
+        slides={project.images}
+        mode={project.kind}
+        title={project.title}
+      />
 
       <div className="p-5">
         <h3 className="font-display text-lg font-semibold text-foreground">
@@ -283,20 +249,14 @@ function ProjectCardWeb({
           {project.description}
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.tech.map((tech) => (
-            <Badge key={tech} variant="outline" className="rounded-full">
-              {tech}
-            </Badge>
-          ))}
-        </div>
-
         <div className="mt-4 flex gap-2">
           <Button
             asChild
             variant="outline"
             size="sm"
-            className={project.repoUrl ? "rounded-full flex-1" : "rounded-full w-full"}
+            className={
+              project.repoUrl ? "rounded-full flex-1" : "rounded-full w-full"
+            }
           >
             <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="mr-2 h-3.5 w-3.5" />
@@ -305,8 +265,17 @@ function ProjectCardWeb({
           </Button>
 
           {project.repoUrl && (
-            <Button asChild variant="ghost" size="sm" className="rounded-full px-4">
-              <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className="rounded-full px-4"
+            >
+              <a
+                href={project.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Github className="mr-2 h-3.5 w-3.5" />
                 Code
               </a>
@@ -348,7 +317,11 @@ export default function ProjectsSection() {
         >
           {orderedProjects.map((project, i) =>
             project.kind === "mobile" ? (
-              <ProjectCardMobile key={project.title} project={project} index={i} />
+              <ProjectCardMobile
+                key={project.title}
+                project={project}
+                index={i}
+              />
             ) : (
               <ProjectCardWeb key={project.title} project={project} index={i} />
             ),

@@ -10,9 +10,12 @@ import anHero from "@/assets/projects/aniverse/hero.png";
 import anGenres from "@/assets/projects/aniverse/genres.png";
 import anTrending from "@/assets/projects/aniverse/trending.png";
 
-import tmHome from "@/assets/projects/taskorbit-mobile/home.png";
-import tmTasks from "@/assets/projects/taskorbit-mobile/tasks.png";
-import tmInsights from "@/assets/projects/taskorbit-mobile/insights.png";
+import tmHome from "@/assets/projects/taskorbit-mobile/m1.jpg";
+import tmTasks from "@/assets/projects/taskorbit-mobile/m2.jpg";
+import tmInsights from "@/assets/projects/taskorbit-mobile/m3.jpg";
+import plPricing from "@/assets/projects/paylance/paylance3.png";
+import plInventory from "@/assets/projects/paylance/paylance2.png";
+import plInvoice from "@/assets/projects/paylance/paylance1.png";
 
 export type ProjectKind = "web" | "mobile";
 
@@ -31,7 +34,6 @@ interface BaseProject {
   description: string;
   kind: ProjectKind;
   featured?: boolean;
-  tech: string[];
 }
 
 export interface WebProject extends BaseProject {
@@ -62,14 +64,16 @@ export const projects: PortfolioProject[] = [
     screenshots: [
       { src: tmHome, alt: "TaskOrbit mobile home dashboard" },
       { src: tmTasks, alt: "TaskOrbit mobile task planning view" },
-      { src: tmInsights, alt: "TaskOrbit mobile analytics and insights screen" },
+      {
+        src: tmInsights,
+        alt: "TaskOrbit mobile analytics and insights screen",
+      },
     ],
     storeLinks: {
       appStore: "https://apps.apple.com/us/genre/ios-productivity/id6007",
       googlePlay: "https://play.google.com/store/apps/category/PRODUCTIVITY",
     },
     caseStudyUrl: "https://savvy-wallet.lovable.app",
-    tech: ["React Native", "Expo", "TypeScript", "Firebase"],
   },
   {
     title: "Haven Harmony",
@@ -82,7 +86,24 @@ export const projects: PortfolioProject[] = [
       { src: hhRooms, alt: "Haven Harmony rooms management interface" },
     ],
     liveUrl: "https://havenharmony.lovable.app",
-    tech: ["React", "TypeScript", "Tailwind", "Framer Motion"],
+  },
+  {
+    title: "Paylance",
+    description:
+      "An all-in-one invoicing and business operations platform with client billing, inventory tracking, and PDF invoice workflows.",
+    kind: "web",
+    images: [
+      {
+        src: plPricing,
+        alt: "Paylance billing plans and subscription overview",
+      },
+      {
+        src: plInventory,
+        alt: "Paylance inventory dashboard with stock levels",
+      },
+      { src: plInvoice, alt: "Paylance invoice preview and PDF export" },
+    ],
+    liveUrl: "https://paylance.lovable.app",
   },
   {
     title: "Savvy Wallet",
@@ -95,7 +116,6 @@ export const projects: PortfolioProject[] = [
       { src: swTransactions, alt: "Savvy Wallet transaction entry form" },
     ],
     liveUrl: "https://savvy-wallet.lovable.app",
-    tech: ["React", "TypeScript", "Recharts", "Tailwind"],
   },
   {
     title: "Aniverse Canvas",
@@ -108,6 +128,5 @@ export const projects: PortfolioProject[] = [
       { src: anTrending, alt: "Aniverse Canvas trending gallery" },
     ],
     liveUrl: "https://aniverse-canvas.lovable.app",
-    tech: ["React", "TypeScript", "Framer Motion", "Supabase"],
   },
 ];
