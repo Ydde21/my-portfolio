@@ -87,7 +87,7 @@ function ProjectCarousel({
   return (
     <div className={mode === "mobile" ? "px-5 pt-4" : ""}>
       {mode === "mobile" ? (
-        <div className="relative mx-auto w-full max-w-[260px]">
+        <div className="relative mx-auto w-full max-w-[205px] sm:max-w-[220px] lg:max-w-[200px]">
           <div className="absolute -inset-3 rounded-[2.8rem] bg-primary/20 blur-2xl" />
           <div className="relative aspect-[9/19.5] w-full rounded-[2.5rem] border border-border bg-background p-1 shadow-[0_30px_60px_-25px_hsl(var(--primary)/0.35)]">
             <div className="absolute left-1/2 top-1.5 h-1.5 w-16 -translate-x-1/2 rounded-full bg-muted-foreground/40" />
@@ -159,7 +159,7 @@ function ProjectCardMobile({
 
   return (
     <motion.article
-      className="group overflow-hidden rounded-xl border border-border bg-card lg:col-span-2"
+      className="group overflow-hidden rounded-xl border border-border bg-card"
       data-testid="mobile-project-card"
       variants={cardVariants}
       initial="hidden"
