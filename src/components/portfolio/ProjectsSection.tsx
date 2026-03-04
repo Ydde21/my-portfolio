@@ -63,7 +63,7 @@ function ProjectCarousel({
           className={
             isMobile
               ? "absolute inset-x-0 w-full object-cover"
-              : "absolute inset-0 h-full w-full object-cover"
+              : "absolute inset-0 h-full w-full object-contain"
           }
           style={
             isMobile
@@ -76,7 +76,6 @@ function ProjectCarousel({
           initial={false}
           animate={{
             opacity: i === current ? 1 : 0,
-            scale: i === current ? 1 : 1.05,
           }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
         />

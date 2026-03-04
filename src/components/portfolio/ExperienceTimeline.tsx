@@ -4,12 +4,12 @@ import { Code, Rocket, Users, Award } from "lucide-react";
 const milestones = [
   {
     year: "2020",
-    title: "Started Coding Journey",
+    title: "Bachelor of Science in Information Technology",
     icon: Code,
   },
   {
     year: "2024",
-    title: "Jr. Web/App Developer",
+    title: "Jr. Software Developer",
     icon: Users,
   },
   {

@@ -17,6 +17,16 @@ import plPricing from "@/assets/projects/paylance/paylance3.png";
 import plInventory from "@/assets/projects/paylance/paylance2.png";
 import plInvoice from "@/assets/projects/paylance/paylance1.png";
 
+import sfHero from "@/assets/projects/sulitflight/sulitflight1.png";
+import sfResults from "@/assets/projects/sulitflight/sulitflight2.png";
+import sfFilters from "@/assets/projects/sulitflight/sulitflight3.png";
+import mfOverview from "@/assets/projects/mineflow/mineflow1.png";
+import mfBoards from "@/assets/projects/mineflow/mineflow2.png";
+import mfAnalytics from "@/assets/projects/mineflow/mineflow3.png";
+import afDashboard from "@/assets/projects/adforge/adforge1.png";
+import afCampaigns from "@/assets/projects/adforge/adforge2.png";
+import afInsights from "@/assets/projects/adforge/adforge3.png";
+
 export type ProjectKind = "web" | "mobile";
 
 export interface ProjectScreenshot {
@@ -106,6 +116,42 @@ export const projects: PortfolioProject[] = [
       { src: plInvoice, alt: "Paylance invoice preview and PDF export" },
     ],
     liveUrl: "https://paylance.lovable.app",
+  },
+  {
+    title: "SulitFlights",
+    description:
+      "A flight search web app focused on helping users find the cheapest available flight options quickly.",
+    kind: "web",
+    images: [
+      { src: sfHero, alt: "SulitFlights search page for flight deals" },
+      { src: sfResults, alt: "SulitFlights flight results and pricing list" },
+      { src: sfFilters, alt: "SulitFlights filters for cheaper flights" },
+    ],
+    liveUrl: "https://sulitflights.sticklight.app/",
+  },
+  {
+    title: "Mine Flow",
+    description:
+      "An auto-reply system for Facebook live sellers that detects comment keywords, sends automated Messenger DMs, and continues the transaction flow until completion.",
+    kind: "web",
+    images: [
+      { src: mfOverview, alt: "Mine Flow overview dashboard" },
+      { src: mfBoards, alt: "Mine Flow project board and task management" },
+      { src: mfAnalytics, alt: "Mine Flow analytics and progress insights" },
+    ],
+    liveUrl: "https://mineflow.lovable.app",
+  },
+  {
+    title: "AdForge",
+    description:
+      "An ad campaign management web app for building creatives, launching campaigns, and monitoring performance insights.",
+    kind: "web",
+    images: [
+      { src: afDashboard, alt: "AdForge campaign dashboard overview" },
+      { src: afCampaigns, alt: "AdForge active campaigns management screen" },
+      { src: afInsights, alt: "AdForge analytics and ad performance insights" },
+    ],
+    liveUrl: "https://adforge-demo.lovable.app/app",
   },
   {
     title: "Savvy Wallet",
