@@ -26,6 +26,9 @@ import mfAnalytics from "@/assets/projects/mineflow/mineflow3.png";
 import afDashboard from "@/assets/projects/adforge/adforge1.png";
 import afCampaigns from "@/assets/projects/adforge/adforge2.png";
 import afInsights from "@/assets/projects/adforge/adforge3.png";
+import spHome from "@/assets/projects/servicepass/servicepass1.png";
+import spStudy from "@/assets/projects/servicepass/servicepass2.png";
+import spMockExam from "@/assets/projects/servicepass/servicepass3.png";
 
 export type ProjectKind = "web" | "mobile";
 
@@ -152,6 +155,21 @@ export const projects: PortfolioProject[] = [
       { src: afInsights, alt: "AdForge analytics and ad performance insights" },
     ],
     liveUrl: "https://adforge-demo.lovable.app/app",
+  },
+  {
+    title: "ServicePass PH",
+    description:
+      "A Civil Service Exam simulator with Study Mode and a timed Mock Exam experience modeled after the real CSE flow. Includes PayMongo payment gateway integration in test mode while business verification is pending.",
+    kind: "web",
+    images: [
+      { src: spHome, alt: "ServicePass PH exam simulator landing screen" },
+      { src: spStudy, alt: "ServicePass PH study mode reviewer interface" },
+      {
+        src: spMockExam,
+        alt: "ServicePass PH mock exam interface with timed questions",
+      },
+    ],
+    liveUrl: "https://servicepassph.vercel.app/",
   },
   {
     title: "Savvy Wallet",
