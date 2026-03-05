@@ -29,6 +29,9 @@ import afInsights from "@/assets/projects/adforge/adforge3.png";
 import spHome from "@/assets/projects/servicepass/servicepass1.png";
 import spStudy from "@/assets/projects/servicepass/servicepass2.png";
 import spMockExam from "@/assets/projects/servicepass/servicepass3.png";
+import ppDashboard from "@/assets/projects/presyopro/presyopro1.png";
+import ppCalculator from "@/assets/projects/presyopro/presyopro2.png";
+import ppBreakdown from "@/assets/projects/presyopro/presyopro3.png";
 
 export type ProjectKind = "web" | "mobile";
 
@@ -170,6 +173,18 @@ export const projects: PortfolioProject[] = [
       },
     ],
     liveUrl: "https://servicepassph.vercel.app/",
+  },
+  {
+    title: "Presyo Pro Calculator",
+    description:
+      "A pricing and profit-margin calculator for online sellers that estimates the right selling price based on costs, fees, and target profit so they can stay competitive without losing money.",
+    kind: "web",
+    images: [
+      { src: ppDashboard, alt: "Presyo Pro Calculator dashboard overview" },
+      { src: ppCalculator, alt: "Presyo Pro product pricing calculator" },
+      { src: ppBreakdown, alt: "Presyo Pro cost and profit breakdown view" },
+    ],
+    liveUrl: "https://presyopro.sticklight.app/",
   },
   {
     title: "Savvy Wallet",
