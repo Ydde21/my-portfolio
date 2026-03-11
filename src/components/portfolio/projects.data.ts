@@ -32,6 +32,18 @@ import spMockExam from "@/assets/projects/servicepass/servicepass3.png";
 import ppDashboard from "@/assets/projects/presyopro/presyopro1.png";
 import ppCalculator from "@/assets/projects/presyopro/presyopro2.png";
 import ppBreakdown from "@/assets/projects/presyopro/presyopro3.png";
+import pdOverview from "@/assets/projects/procuredesk/procuredesk1.png";
+import pdWorkflow from "@/assets/projects/procuredesk/procuredesk2.png";
+import pdAudit from "@/assets/projects/procuredesk/procuredesk3.png.png";
+import cqOverview from "@/assets/projects/cliniqo/cliniqo1.png";
+import cqQueue from "@/assets/projects/cliniqo/cliniqo2.png";
+import cqConsultation from "@/assets/projects/cliniqo/cliniqo3.png.png";
+import tpOverview from "@/assets/projects/timepay/timepay1.png";
+import tpAttendance from "@/assets/projects/timepay/timepay2.png.png";
+import tpPayroll from "@/assets/projects/timepay/timepay3.png.png";
+import pmOverview from "@/assets/projects/paymatrix/paymatrix1.png";
+import pmImport from "@/assets/projects/paymatrix/paymatrix2.png.png";
+import pmResults from "@/assets/projects/paymatrix/paymatrix3.png.png";
 
 export type ProjectKind = "web" | "mobile";
 
@@ -122,6 +134,63 @@ export const projects: PortfolioProject[] = [
       { src: plInvoice, alt: "Paylance invoice preview and PDF export" },
     ],
     liveUrl: "https://paylance.lovable.app",
+  },
+  {
+    title: "ProcureDesk",
+    description:
+      "A full-cycle Purchase Request and Budget Control System that streamlines procurement from draft to delivery through role-based approvals, budget reservation/release, PO creation, and immutable audit logs.",
+    kind: "web",
+    images: [
+      { src: pdOverview, alt: "ProcureDesk dashboard and request overview" },
+      { src: pdWorkflow, alt: "ProcureDesk approval workflow and queue view" },
+      { src: pdAudit, alt: "ProcureDesk audit trail and budget tracking view" },
+    ],
+    liveUrl: "https://procuredesk.lovable.app/",
+  },
+  {
+    title: "Cliniqo",
+    description:
+      "A full-stack Clinic Booking and Queue Management System that streamlines patient registration, appointment scheduling, walk-in handling, check-in, and real-time queue monitoring. It includes secure role-based access (Admin, Receptionist, Doctor, Patient), doctor consultation workflows, automated appointment reminders, analytics reports, and audit logs to improve clinic operations and reduce patient wait times.",
+    kind: "web",
+    images: [
+      { src: cqOverview, alt: "Cliniqo clinic dashboard and activity overview" },
+      { src: cqQueue, alt: "Cliniqo patient queue and check-in management view" },
+      {
+        src: cqConsultation,
+        alt: "Cliniqo consultation records and appointment workflow",
+      },
+    ],
+    liveUrl: "https://cliniqo.lovable.app/",
+  },
+  {
+    title: "TimePay PH",
+    description:
+      "A mobile-first SaaS attendance and payroll platform built for Philippine businesses, designed to unify workforce operations in one secure system. It combines role-based employee management, geofenced clock-in/out, and attendance analytics with a phased path to fully compliant payroll processing, government contributions, tax calculations, payslips, and audit-ready controls.",
+    kind: "web",
+    images: [
+      { src: tpOverview, alt: "TimePay PH dashboard and workforce overview" },
+      {
+        src: tpAttendance,
+        alt: "TimePay PH attendance and geofencing clock in workflow",
+      },
+      { src: tpPayroll, alt: "TimePay PH payroll and compliance reporting view" },
+    ],
+    liveUrl: "https://timepay-ph.vercel.app/",
+  },
+  {
+    title: "PayMatrix",
+    description:
+      "PayMatrix is a modern Philippine payroll system focused on accurate, compliance-ready payroll processing with biometric attendance import. It supports fingerprint log uploads (including ZKTeco and generic CSV), intelligent column mapping and punch pairing, then computes end-to-end payroll with SSS, PhilHealth, Pag-IBIG, TRAIN withholding tax, overtime/holiday pay, allowances, deductions, and exportable payroll results in a clean, role-ready web interface.",
+    kind: "web",
+    images: [
+      { src: pmOverview, alt: "PayMatrix payroll dashboard overview" },
+      {
+        src: pmImport,
+        alt: "PayMatrix biometric attendance import and column mapping",
+      },
+      { src: pmResults, alt: "PayMatrix payroll computation and results view" },
+    ],
+    liveUrl: "https://paymatrix.lovable.app/",
   },
   {
     title: "SulitFlights",
