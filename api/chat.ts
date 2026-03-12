@@ -332,12 +332,36 @@ function createSystemInstruction(): string {
 }
 
 function parseGeminiJson(text: string): GeminiOutput | null {
-  const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "");
+  const cleaned = text
+    .trim()
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/, "");
+
   try {
     return JSON.parse(cleaned) as GeminiOutput;
   } catch {
+    const firstBrace = cleaned.indexOf("{");
+    const lastBrace = cleaned.lastIndexOf("}");
+    if (firstBrace >= 0 && lastBrace > firstBrace) {
+      const maybeJson = cleaned.slice(firstBrace, lastBrace + 1);
+      try {
+        return JSON.parse(maybeJson) as GeminiOutput;
+      } catch {
+        return null;
+      }
+    }
     return null;
   }
+}
+
+function normalizeModelTextAnswer(text: string): string {
+  return text
+    .trim()
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/, "")
+    .trim();
 }
 
 function extractGeminiText(payload: unknown): string | null {
@@ -450,20 +474,32 @@ async function askGemini(
     }
 
     const parsed = parseGeminiJson(text);
-    if (!parsed) {
+    if (parsed) {
+      if (parsed.inScope !== true) {
+        return OUT_OF_SCOPE_REPLY;
+      }
+
+      const answer = typeof parsed.answer === "string" ? parsed.answer.trim() : "";
+      if (answer) {
+        return answer.slice(0, MAX_MODEL_RESPONSE_LENGTH);
+      }
+    }
+
+    const fallbackAnswer = normalizeModelTextAnswer(text);
+    if (!fallbackAnswer) {
       return OUT_OF_SCOPE_REPLY;
     }
 
-    if (parsed.inScope !== true) {
+    const normalizedFallback = fallbackAnswer.toLowerCase();
+    const looksLikeRefusal =
+      normalizedFallback.includes("only answer questions related to this portfolio") ||
+      normalizedFallback.includes("out of scope");
+
+    if (looksLikeRefusal) {
       return OUT_OF_SCOPE_REPLY;
     }
 
-    const answer = typeof parsed.answer === "string" ? parsed.answer.trim() : "";
-    if (!answer) {
-      return OUT_OF_SCOPE_REPLY;
-    }
-
-    return answer.slice(0, MAX_MODEL_RESPONSE_LENGTH);
+    return fallbackAnswer.slice(0, MAX_MODEL_RESPONSE_LENGTH);
   }
 
   const hadQuotaIssue = errors.some((item) => isQuotaExceeded(item.status, item.message));
