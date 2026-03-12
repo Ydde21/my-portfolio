@@ -71,3 +71,20 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Security Configuration
+
+Copy `.env.example` to `.env` and configure:
+
+- `RESEND_API_KEY`: API key used by the contact email endpoint.
+- `GEMINI_API_KEY`: API key used by the scoped portfolio chatbot endpoint.
+- `GEMINI_MODEL`: Gemini model name (default: `gemini-3-flash-preview`).
+- `GEMINI_FALLBACK_MODELS`: Comma-separated backup models used if the primary model is unavailable/quota-limited.
+- `GEMINI_API_BASE_URL`: Gemini API base URL (default: `https://generativelanguage.googleapis.com/v1beta`).
+- `ALLOWED_ORIGINS`: Comma-separated list of trusted browser origins that may call `/api/send` and `/api/chat`.
+- `CONTACT_RATE_LIMIT_WINDOW_MS`: Rate-limit window in milliseconds.
+- `CONTACT_RATE_LIMIT_MAX_REQUESTS`: Max accepted requests per client IP per window.
+- `CONTACT_RATE_LIMIT_BLOCK_MS`: Temporary block duration after exceeding the limit.
+- `CHAT_RATE_LIMIT_WINDOW_MS`: Chatbot rate-limit window in milliseconds.
+- `CHAT_RATE_LIMIT_MAX_REQUESTS`: Max chatbot requests per client IP per window.
+- `CHAT_RATE_LIMIT_BLOCK_MS`: Temporary chatbot block duration after exceeding the limit.

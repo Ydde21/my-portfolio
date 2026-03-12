@@ -41,6 +41,7 @@ export default function ContactSection() {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       message: formData.get("message") as string,
+      website: formData.get("website") as string,
     };
 
     try {
@@ -57,8 +58,14 @@ export default function ContactSection() {
         });
         form.reset();
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to send message');
+        let message = "Failed to send message";
+        try {
+          const errorData = await response.json();
+          message = errorData.error || message;
+        } catch {
+          // no-op: keep generic fallback if server returned non-JSON
+        }
+        throw new Error(message);
       }
     } catch (err) {
       console.error('Error sending message:', err);
@@ -142,14 +149,29 @@ export default function ContactSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
+            <input
+              type="text"
+              name="website"
+              autoComplete="off"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="sr-only"
+            />
             <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Input name="name" placeholder="Your Name" required className="rounded-lg" />
+              <Input name="name" placeholder="Your Name" maxLength={120} required className="rounded-lg" />
             </motion.div>
             <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Input name="email" type="email" placeholder="Your Email" required className="rounded-lg" />
+              <Input name="email" type="email" placeholder="Your Email" maxLength={254} required className="rounded-lg" />
             </motion.div>
             <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Textarea name="message" placeholder="Your Message" rows={5} required className="rounded-lg resize-none" />
+              <Textarea
+                name="message"
+                placeholder="Your Message"
+                rows={5}
+                maxLength={4000}
+                required
+                className="rounded-lg resize-none"
+              />
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button type="submit" disabled={sending} className="rounded-full w-full font-semibold shadow-lg shadow-primary/20">

@@ -5,6 +5,7 @@ import TechMarquee from "@/components/portfolio/TechMarquee";
 import TechStackSection from "@/components/portfolio/TechStackSection";
 import ExperienceTimeline from "@/components/portfolio/ExperienceTimeline";
 import ProjectsSection from "@/components/portfolio/ProjectsSection";
+import ChatbotSection from "@/components/portfolio/ChatbotSection";
 import ValueCards from "@/components/portfolio/ValueCards";
 import ContactSection from "@/components/portfolio/ContactSection";
 import Footer from "@/components/portfolio/Footer";
@@ -20,6 +21,7 @@ const Index = () => {
         <TechStackSection />
         <ExperienceTimeline />
         <ProjectsSection />
+        <ChatbotSection />
         <ValueCards />
         <ContactSection />
       </main>
