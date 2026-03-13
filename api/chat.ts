@@ -114,6 +114,18 @@ type RateLimitEntry = {
   blockedUntil: number;
 };
 
+type RateLimitResult = { allowed: true } | { allowed: false; retryAfterSeconds: number };
+
+type ChatHistoryMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+type IncomingChatHistoryMessage = {
+  role?: "user" | "assistant";
+  content?: string;
+};
+
 const rateLimitStore = new Map<string, RateLimitEntry>();
 const allowedOrigins = new Set(
   (process.env.ALLOWED_ORIGINS ?? "")
@@ -238,7 +250,7 @@ function cleanupRateLimitStore(now: number): void {
   }
 }
 
-function checkRateLimit(clientKey: string): { allowed: true } | { allowed: false; retryAfterSeconds: number } {
+function checkRateLimit(clientKey: string): RateLimitResult {
   const now = Date.now();
   const current = rateLimitStore.get(clientKey);
 
@@ -262,6 +274,17 @@ function checkRateLimit(clientKey: string): { allowed: true } | { allowed: false
   }
 
   return { allowed: true };
+}
+
+function isValidHistoryMessage(item: IncomingChatHistoryMessage): item is ChatHistoryMessage {
+  return (item.role === "user" || item.role === "assistant") && typeof item.content === "string" && item.content.trim().length > 0;
+}
+
+function normalizeHistory(history: IncomingChatHistoryMessage[]): ChatHistoryMessage[] {
+  return history.filter(isValidHistoryMessage).map((item) => ({
+    role: item.role,
+    content: item.content.trim(),
+  }));
 }
 
 function setDefaultSecurityHeaders(res: VercelResponse): void {
@@ -298,7 +321,7 @@ function isFollowUpMessage(value: string): boolean {
   return FOLLOW_UP_TERMS.some((term) => normalized.includes(term));
 }
 
-function isInScopeMessage(message: string, history: Array<{ role: "user" | "assistant"; content: string }>): boolean {
+function isInScopeMessage(message: string, history: ChatHistoryMessage[]): boolean {
   if (hasScopeSignal(message)) {
     return true;
   }
@@ -412,7 +435,7 @@ function isQuotaExceeded(status: number, message: string): boolean {
 async function askGemini(
   apiKey: string,
   message: string,
-  history: Array<{ role: "user" | "assistant"; content: string }>,
+  history: ChatHistoryMessage[],
 ): Promise<string> {
   const modelsToTry = getGeminiModelsToTry();
   const contents = [
@@ -535,7 +558,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const rateLimitResult = checkRateLimit(getClientIp(req));
-  if (!rateLimitResult.allowed) {
+  if ("retryAfterSeconds" in rateLimitResult) {
     res.setHeader("Retry-After", rateLimitResult.retryAfterSeconds.toString());
     return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
@@ -545,7 +568,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "Invalid request payload." });
   }
 
-  const { message, history } = parsedBody.data;
+  const { message, history: rawHistory } = parsedBody.data;
+  const history = normalizeHistory(rawHistory);
   if (!isInScopeMessage(message, history)) {
     return res.status(200).json({ reply: OUT_OF_SCOPE_REPLY, inScope: false });
   }

@@ -14,6 +14,8 @@ type RateLimitEntry = {
   blockedUntil: number;
 };
 
+type RateLimitResult = { allowed: true } | { allowed: false; retryAfterSeconds: number };
+
 const rateLimitStore = new Map<string, RateLimitEntry>();
 const allowedOrigins = new Set(
   (process.env.ALLOWED_ORIGINS ?? "")
@@ -98,7 +100,7 @@ function cleanupRateLimitStore(now: number): void {
   }
 }
 
-function checkRateLimit(clientKey: string): { allowed: true } | { allowed: false; retryAfterSeconds: number } {
+function checkRateLimit(clientKey: string): RateLimitResult {
   const now = Date.now();
   const current = rateLimitStore.get(clientKey);
 
@@ -165,7 +167,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const rateLimitResult = checkRateLimit(getClientIp(req));
-  if (!rateLimitResult.allowed) {
+  if ("retryAfterSeconds" in rateLimitResult) {
     res.setHeader("Retry-After", rateLimitResult.retryAfterSeconds.toString());
     return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
