@@ -25,7 +25,7 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
   return (
     <div className="flex overflow-hidden group">
       <div
-        className={`flex shrink-0 gap-3 py-2 ${reverse ? "marquee-reverse" : "marquee"} group-hover:[animation-play-state:paused]`}
+        className={`flex shrink-0 gap-3 py-2 ${reverse ? "animate-marquee-reverse" : "animate-marquee"} group-hover:[animation-play-state:paused]`}
       >
         {items.map((t, i) => (
           <motion.span

@@ -1,131 +1,57 @@
 import { motion } from "framer-motion";
-import { Code, Rocket, Users, Award } from "lucide-react";
 
 const milestones = [
   {
     year: "2020",
     title: "Bachelor of Science in Information Technology",
-    icon: Code,
   },
   {
     year: "2024",
     title: "Jr. Software Developer",
-    icon: Users,
   },
   {
     year: "2026",
     title: "Full Stack Specialist",
-    icon: Award,
   },
 ];
 
-const lineVariants = {
-  hidden: { scaleY: 0 },
-  visible: {
-    scaleY: 1,
-    transition: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
-
 export default function ExperienceTimeline() {
   return (
-    <section id="experience" className="py-24 px-5">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
-            My Professional Journey
+    <section id="experience" className="border-t border-border px-5 py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-14">
+          <p className="section-index">04 — Experience</p>
+          <h2 className="font-display mt-3 max-w-md text-3xl leading-tight tracking-tight sm:text-5xl">
+            Where I've been.
           </h2>
-          <p className="mt-3 text-muted-foreground">
-            Key milestones along the way
-          </p>
-        </motion.div>
-
-        <div className="relative">
-          {/* Animated vertical line */}
-          <motion.div
-            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-border origin-top"
-            style={{ transform: "translateX(-50%)" }}
-            variants={lineVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          />
-
-          <div className="space-y-12">
-            {milestones.map((m, i) => {
-              const isLeft = i % 2 === 0;
-              const Icon = m.icon;
-
-              return (
-                <motion.div
-                  key={m.year}
-                  className={`relative flex items-start gap-6 md:gap-0 ${
-                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
-                  initial={{ opacity: 0, x: isLeft ? -60 : 60 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{
-                    duration: 0.6,
-                    delay: i * 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                  }}
-                >
-                  {/* Glowing dot */}
-                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10">
-                    <motion.div
-                      className="w-4 h-4 rounded-full bg-primary"
-                      animate={{
-                        boxShadow: [
-                          "0 0 0 0 hsl(199 89% 48% / 0.4)",
-                          "0 0 0 10px hsl(199 89% 48% / 0)",
-                        ],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                  </div>
-
-                  {/* Card */}
-                  <div
-                    className={`ml-14 md:ml-0 md:w-[calc(50%-2rem)] ${
-                      isLeft ? "md:pr-8 md:text-right" : "md:pl-8"
-                    }`}
-                  >
-                    <motion.div
-                      className="rounded-xl border border-border bg-card p-5 shadow-sm"
-                      whileHover={{
-                        y: -4,
-                        boxShadow:
-                          "0 12px 30px -10px hsl(var(--primary) / 0.15)",
-                      }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      <div
-                        className={`flex items-center gap-3 ${isLeft ? "md:justify-end" : ""}`}
-                      >
-                        <div className="p-2 rounded-lg bg-primary/10">
-                          <Icon className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="text-xs font-semibold text-primary tracking-wider uppercase">
-                          {m.year}
-                        </span>
-                      </div>
-                      <h3 className="mt-3 font-display text-lg font-semibold text-foreground">
-                        {m.title}
-                      </h3>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
+
+        <ol className="divide-y divide-border border-y border-border">
+          {milestones.map((m, i) => (
+            <motion.li
+              key={m.year}
+              className="group grid grid-cols-[auto_1fr] items-baseline gap-x-8 py-7 sm:grid-cols-[8rem_1fr_1fr] sm:gap-x-14"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.55,
+                delay: i * 0.07,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <span className="font-display text-2xl tracking-tight text-foreground/90 sm:text-3xl">
+                {m.year}
+              </span>
+              <h3 className="col-span-2 mt-1 text-sm font-medium sm:col-span-1 sm:mt-0 sm:text-base">
+                {m.title}
+              </h3>
+              <span className="hidden text-xs uppercase tracking-[0.14em] text-muted-foreground sm:block sm:text-right">
+                {i === milestones.length - 1 ? "Present" : ""}
+              </span>
+            </motion.li>
+          ))}
+        </ol>
       </div>
     </section>
   );

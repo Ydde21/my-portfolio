@@ -1,15 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  Apple,
-  ExternalLink,
-  FileText,
-  Github,
-  Play,
-  Smartphone,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight } from "lucide-react";
 import {
   projects,
   type MobileProject,
@@ -86,17 +77,15 @@ function ProjectCarousel({
   return (
     <div className={mode === "mobile" ? "px-5 pt-4" : ""}>
       {mode === "mobile" ? (
-        <div className="relative mx-auto w-full max-w-[205px] sm:max-w-[220px] lg:max-w-[200px]">
-          <div className="absolute -inset-3 rounded-[2.8rem] bg-primary/20 blur-2xl" />
-          <div className="relative aspect-[9/19.5] w-full rounded-[2.5rem] border border-border bg-background p-1 shadow-[0_30px_60px_-25px_hsl(var(--primary)/0.35)]">
-            <div className="absolute left-1/2 top-1.5 h-1.5 w-16 -translate-x-1/2 rounded-full bg-muted-foreground/40" />
-            <div className="relative h-full overflow-hidden rounded-[1.9rem] bg-secondary">
+        <div className="relative mx-auto w-full max-w-[220px] lg:mx-0 lg:w-[220px] lg:max-w-none lg:shrink-0">
+          <div className="relative aspect-[9/19.5] w-full overflow-hidden rounded-[2rem] border border-border bg-background p-1">
+            <div className="relative h-full overflow-hidden rounded-[1.6rem] bg-secondary">
               {imageStack}
             </div>
           </div>
         </div>
       ) : (
-        <div className="relative aspect-[3/2] overflow-hidden bg-secondary">
+        <div className="relative aspect-[3/2] overflow-hidden border-b border-border bg-secondary">
           {imageStack}
         </div>
       )}
@@ -118,7 +107,7 @@ function ProjectCarousel({
             >
               {i === current && (
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-primary"
+                  className="absolute inset-0 rounded-full bg-accent"
                   layoutId={`${title}-carousel-dot`}
                   transition={{ duration: 0.3 }}
                 />
@@ -131,19 +120,57 @@ function ProjectCarousel({
   );
 }
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 60, rotateX: -10 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: {
-      duration: 0.7,
-      delay: i * 0.15,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  }),
-};
+function ProjectMeta({ project }: { project: PortfolioProject }) {
+  return (
+    <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+      {project.kind === "mobile"
+        ? `${project.platforms.join(" · ")} app`
+        : "Web application"}
+    </p>
+  );
+}
+
+function ProjectLinks({ project }: { project: PortfolioProject }) {
+  if (project.kind === "mobile") {
+    const mp = project as MobileProject;
+    return (
+      <a
+        href={mp.downloadUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="link-underline inline-flex items-center gap-1 text-sm font-medium"
+      >
+        Download
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      </a>
+    );
+  }
+
+  const wp = project as WebProject;
+  return (
+    <>
+      <a
+        href={wp.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="link-underline inline-flex items-center gap-1 text-sm font-medium"
+      >
+        Visit site
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      </a>
+      {wp.repoUrl && (
+        <a
+          href={wp.repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-underline text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Code
+        </a>
+      )}
+    </>
+  );
+}
 
 function ProjectCardMobile({
   project,
@@ -152,71 +179,45 @@ function ProjectCardMobile({
   project: MobileProject;
   index: number;
 }) {
-  const hasStoreLinks = Boolean(
-    project.storeLinks.appStore || project.storeLinks.googlePlay,
-  );
-
   return (
     <motion.article
-      className="group overflow-hidden rounded-xl border border-border bg-card"
+      className="group border-t border-border pb-14 pt-10 lg:col-span-2 lg:grid lg:grid-cols-[1fr_240px] lg:items-start lg:gap-14"
       data-testid="mobile-project-card"
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      custom={index}
-      whileHover={{
-        y: -12,
-        rotateY: 2,
-        rotateX: -2,
-        scale: 1.02,
-        boxShadow: "0 25px 50px -20px hsl(var(--primary) / 0.25)",
-      }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="p-5 pb-1">
-        <Badge className="mb-3 gap-1.5 rounded-full px-3 py-1 text-[10px] uppercase tracking-wider">
-          <Smartphone className="h-3.5 w-3.5" />
-          Mobile App
-        </Badge>
-        <h3 className="font-display text-2xl font-semibold text-foreground">
-          {project.title}
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {project.description}
-        </p>
-      </div>
-
-      <ProjectCarousel
-        slides={project.screenshots}
-        mode={project.kind}
-        title={project.title}
-      />
-
-      <div className="p-5 pt-4">
-        <div className="flex flex-wrap gap-2">
+      <div className="max-w-xl">
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
+            Mobile App
+          </span>
           {project.platforms.map((platform) => (
-            <Badge
+            <span
               key={platform}
-              variant="secondary"
-              className="rounded-full px-3 py-1"
+              className="rounded-full border border-border px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground"
             >
               {platform}
-            </Badge>
+            </span>
           ))}
         </div>
-        <div className="mt-4">
-          <Button asChild size="sm" className="rounded-full">
-            <a
-              href={project.downloadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="mr-2 h-3.5 w-3.5" />
-              Download App
-            </a>
-          </Button>
+        <h3 className="font-display mt-4 text-3xl tracking-tight">
+          {project.title}
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          {project.description}
+        </p>
+        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+          <ProjectLinks project={project} />
         </div>
+      </div>
+      <div className="mt-10 w-full max-w-[280px] lg:mt-0 lg:w-[240px] lg:max-w-none">
+        <ProjectCarousel
+          slides={project.screenshots}
+          mode={project.kind}
+          title={project.title}
+        />
       </div>
     </motion.article>
   );
@@ -231,67 +232,27 @@ function ProjectCardWeb({
 }) {
   return (
     <motion.article
-      className="group overflow-hidden rounded-xl border border-border bg-card"
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      custom={index}
-      whileHover={{
-        y: -12,
-        rotateY: 3,
-        rotateX: -3,
-        scale: 1.03,
-        boxShadow: "0 25px 50px -20px hsl(var(--primary) / 0.2)",
-      }}
-      transition={{ duration: 0.3 }}
+      className="group border-t border-border pb-14 pt-10"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
     >
       <ProjectCarousel
         slides={project.images}
         mode={project.kind}
         title={project.title}
       />
-
-      <div className="p-5">
-        <h3 className="font-display text-lg font-semibold text-foreground">
+      <div className="mt-5">
+        <ProjectMeta project={project} />
+        <h3 className="font-display mt-2 text-xl tracking-tight">
           {project.title}
         </h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {project.description}
         </p>
-
-        <div className="mt-4 flex gap-2">
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className={
-              project.repoUrl ? "rounded-full flex-1" : "rounded-full w-full"
-            }
-          >
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="mr-2 h-3.5 w-3.5" />
-              Live Demo
-            </a>
-          </Button>
-
-          {project.repoUrl && (
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className="rounded-full px-4"
-            >
-              <a
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Github className="mr-2 h-3.5 w-3.5" />
-                Code
-              </a>
-            </Button>
-          )}
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+          <ProjectLinks project={project} />
         </div>
       </div>
     </motion.article>
@@ -304,27 +265,24 @@ export default function ProjectsSection() {
   );
 
   return (
-    <section id="projects" className="bg-secondary/30 px-5 py-24">
+    <section id="projects" className="px-5 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl">
-        <motion.div
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
-            Featured Work
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            A selection of projects I&apos;ve built
+        <div className="mb-14 flex items-end justify-between gap-6">
+          <div>
+            <p className="section-index">01 — Selected Work</p>
+            <h2 className="font-display mt-3 max-w-lg text-3xl leading-tight tracking-tight sm:text-5xl">
+              Real products, shipped and in use.
+            </h2>
+          </div>
+          <p className="hidden max-w-xs text-sm leading-relaxed text-muted-foreground md:block">
+            Fourteen builds across fintech, healthcare, procurement, and
+            e-commerce — each one designed, engineered, and shipped end to end.
           </p>
-        </motion.div>
+        </div>
 
         <div
-          className="grid grid-cols-1 gap-6 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-x-10 lg:grid-cols-3"
           data-testid="projects-grid"
-          style={{ perspective: "1200px" }}
         >
           {orderedProjects.map((project, i) =>
             project.kind === "mobile" ? (

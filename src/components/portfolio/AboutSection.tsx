@@ -1,141 +1,108 @@
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Eye } from "lucide-react";
 import logo3d from "@/assets/logo-3d.png";
 
-function AnimatedStat({
-  value,
-  label,
-  decimals = 0,
-}: {
-  value: number;
-  label: string;
-  decimals?: number;
-}) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) =>
-    decimals > 0 ? parseFloat(v.toFixed(decimals)) : Math.round(v),
-  );
-  const [display, setDisplay] = useState<number>(0);
-  const [triggered, setTriggered] = useState(false);
-
-  useEffect(() => {
-    if (!triggered) return;
-    const controls = animate(count, value, { duration: 2, ease: "easeOut" });
-    const unsub = rounded.on("change", (v) => setDisplay(v));
-    return () => {
-      controls.stop();
-      unsub();
-    };
-  }, [triggered, value, count, rounded]);
-
-  return (
-    <motion.div
-      className="text-center"
-      onViewportEnter={() => setTriggered(true)}
-      viewport={{ once: true }}
-    >
-      <span className="block font-display text-3xl sm:text-4xl font-bold text-primary">
-        {display}+
-      </span>
-      <span className="text-sm text-muted-foreground mt-1 block">{label}</span>
-    </motion.div>
-  );
-}
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-};
-
-const fadeLeft = {
-  hidden: { opacity: 0, x: -60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
-
-const fadeRight = {
-  hidden: { opacity: 0, x: 60, filter: "blur(6px)" },
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
-
 export default function AboutSection() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="about" className="py-24 px-5">
-      <motion.div
-        className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-      >
-        {/* Image */}
-        <motion.div className="flex justify-center" variants={fadeLeft}>
+    <section id="about" className="border-t border-border px-5 py-24 sm:py-32">
+      <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
+        <div>
+          <p className="section-index">02 — About</p>
           <motion.div
-            className="relative w-64 h-64 sm:w-72 sm:h-72"
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="mt-8 w-52 overflow-hidden rounded-sm border border-border sm:w-60"
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-2xl" />
             <img
               src={logo3d}
               alt="Eddy Casas"
-              className="relative w-full h-full rounded-2xl object-cover border-2 border-border shadow-lg"
+              className={
+                reduceMotion
+                  ? "w-full object-cover"
+                  : "w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+              }
               loading="lazy"
             />
           </motion.div>
-        </motion.div>
-
-        {/* Text */}
-        <motion.div variants={fadeRight}>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
-            About Me
-          </h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            I'm a passionate full-stack developer who loves turning ideas into
-            polished digital experiences. With a strong focus on modern web
-            technologies and clean architecture, I build applications that are
-            not only functional but delightful to use.
+          <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+            Bacolod City, PH
           </p>
+        </div>
 
-          {/* Resume button */}
-          <motion.div
-            className="mt-8"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+        <div>
+          <motion.h2
+            className="font-display max-w-xl text-3xl leading-tight tracking-tight sm:text-4xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Button
-              size="lg"
-              className="rounded-full px-8 font-semibold shadow-lg shadow-primary/25"
-              asChild
-            >
-              <a
-                href="/CasasEddy.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <motion.span
-                  className="mr-2 inline-flex"
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <Eye className="h-4 w-4" />
-                </motion.span>
-                View Resume
-              </a>
-            </Button>
+            I'm a full-stack developer who cares about the whole product — from
+            database schema to the last hover state.
+          </motion.h2>
+
+          <motion.div
+            className="mt-8 max-w-xl space-y-5 text-base leading-relaxed text-muted-foreground"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p>
+              I've shipped fourteen production applications: hotel management,
+              clinic queueing, Philippine payroll compliance, procurement
+              workflows, e-commerce tooling. My bias is toward software that
+              survives contact with real users — role-based access that actually
+              holds, audit logs you can trust, invoices that reconcile.
+            </p>
+            <p>
+              I work across React, TypeScript, Node.js, ASP.NET Core, and
+              PostgreSQL, and I treat design as part of engineering rather than
+              a handoff. If a screen needs explanation, the screen isn't done.
+            </p>
           </motion.div>
-        </motion.div>
-      </motion.div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <a
+              href="/CasasEddy.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-underline inline-flex items-center gap-1.5 text-sm font-medium"
+            >
+              <Eye className="h-4 w-4" />
+              View resume
+            </a>
+            <a
+              href="#contact"
+              className="link-underline inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+              Start a conversation
+            </a>
+          </div>
+
+          <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-border pt-8">
+            {[
+              ["14", "Projects shipped"],
+              ["17", "Technologies"],
+              ["2", "Years coding"],
+            ].map(([value, label]) => (
+              <div key={label}>
+                <dt className="font-display text-3xl tracking-tight sm:text-4xl">
+                  {value}
+                </dt>
+                <dd className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  {label}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
     </section>
   );
 }

@@ -1,266 +1,121 @@
-import { useEffect, useState, useMemo } from "react";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { ArrowDown, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Suspense, lazy } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
-/* ---------- Animated floating particles ---------- */
-function Particles() {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 24 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 6 + 2,
-        duration: Math.random() * 8 + 6,
-        delay: Math.random() * 4,
-      })),
-    []
-  );
+const HeroCanvas = lazy(() => import("./HeroCanvas"));
 
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full bg-primary/15"
-          style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size }}
-          animate={{
-            y: [0, -30, 0, 20, 0],
-            x: [0, 15, -10, 5, 0],
-            opacity: [0.2, 0.6, 0.3, 0.7, 0.2],
-            scale: [1, 1.4, 0.8, 1.2, 1],
-          }}
-          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ---------- Animated counter ---------- */
-function AnimatedNumber({ target }: { target: number }) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v));
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    const controls = animate(count, target, { duration: 2, ease: "easeOut" });
-    const unsub = rounded.on("change", (v) => setDisplay(v));
-    return () => {
-      controls.stop();
-      unsub();
-    };
-  }, [target, count, rounded]);
-
-  return <span>{display}+</span>;
-}
-
-/* ---------- Typewriter ---------- */
-function Typewriter({ words }: { words: string[] }) {
-  const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [phase, setPhase] = useState<"typing" | "pausing" | "deleting">("typing");
-
-  useEffect(() => {
-    const word = words[index];
-
-    if (phase === "typing") {
-      if (text.length < word.length) {
-        const t = setTimeout(() => setText(word.slice(0, text.length + 1)), 80);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setPhase("deleting"), 2000);
-        return () => clearTimeout(t);
-      }
-    }
-
-    if (phase === "deleting") {
-      if (text.length > 0) {
-        const t = setTimeout(() => setText(text.slice(0, -1)), 40);
-        return () => clearTimeout(t);
-      } else {
-        setIndex((i) => (i + 1) % words.length);
-        setPhase("typing");
-      }
-    }
-  }, [text, phase, index, words]);
-
-  return (
-    <span>
-      {text}
-      <motion.span
-        className="inline-block w-[3px] h-[1em] bg-primary ml-0.5 align-middle"
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
-      />
-    </span>
-  );
-}
-
-/* ---------- Geometric decoration ---------- */
-function FloatingShapes() {
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <motion.div
-        className="absolute top-20 left-[10%] w-20 h-20 rounded-full border-2 border-primary/20"
-        animate={{ rotate: 360, scale: [1, 1.15, 1] }}
-        transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-      />
-      <motion.div
-        className="absolute top-[30%] right-[12%] w-12 h-12 border-2 border-accent/20 rotate-45"
-        animate={{ rotate: [45, 135, 45], y: [0, -20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-[25%] left-[18%] w-16 h-16 rounded-full border border-accent/15"
-        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-[55%] right-[8%] w-8 h-8 bg-primary/8 rounded-full"
-        animate={{ y: [0, -40, 0], x: [0, 10, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-[12%] right-[35%] w-4 h-4 bg-primary/15 rounded-full"
-        animate={{ scale: [1, 2, 1], opacity: [0.3, 0.8, 0.3] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  );
-}
-
-/* ---------- Main hero ---------- */
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
+/* Fade-up used for the load sequence; short and restrained on purpose */
+const rise = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: 0.1 + i * 0.09, ease: [0.22, 1, 0.36, 1] as const },
+  }),
 };
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
-};
-
-const stats = [
-  { label: "Projects", value: 10 },
-  { label: "Technologies", value: 13 },
-  { label: "Years Coding", value: 3 },
-];
 
 export default function HeroSection() {
-  return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 px-5">
-      {/* Aurora gradient mesh background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] opacity-[0.07]"
-          style={{
-            background:
-              "radial-gradient(ellipse at 20% 50%, hsl(var(--primary)) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, hsl(var(--accent)) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, hsl(var(--primary)) 0%, transparent 50%)",
-            animation: "aurora 12s ease-in-out infinite alternate",
-          }}
-        />
-      </div>
-      <Particles />
-      <FloatingShapes />
+  const reduceMotion = useReducedMotion();
 
-      <motion.div
-        className="relative z-10 max-w-3xl mx-auto text-center"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <motion.div variants={fadeUp}>
-          <span className="inline-flex items-center gap-3 px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase border border-primary/30 rounded-full text-primary bg-primary/5">
-            Full Stack Developer
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+  return (
+    <section
+      id="home"
+      className="relative flex min-h-screen items-center overflow-hidden px-5 pb-24 pt-28 sm:pt-32"
+    >
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-16 lg:grid-cols-[1.2fr_1fr]">
+        {/* Left: editorial intro */}
+        <div>
+          <motion.p
+            className="section-index"
+            variants={rise}
+            custom={0}
+            initial="hidden"
+            animate="show"
+          >
+            Eddy Casas — Full Stack Developer
+          </motion.p>
+
+          <motion.h1
+            className="font-display mt-6 max-w-xl text-[2.75rem] leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-[4.25rem]"
+            variants={rise}
+            custom={1}
+            initial="hidden"
+            animate="show"
+          >
+            I build dependable web applications for{" "}
+            <em className="font-light italic text-accent">real users</em>.
+          </motion.h1>
+
+          <motion.p
+            className="mt-7 max-w-md text-base leading-relaxed text-muted-foreground"
+            variants={rise}
+            custom={2}
+            initial="hidden"
+            animate="show"
+          >
+            Full-stack developer in Bacolod City, Philippines. I design and ship
+            complete products — booking systems, payroll platforms, fintech
+            tools — with clean architecture and interfaces that respect the
+            person using them.
+          </motion.p>
+
+          <motion.div
+            className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4"
+            variants={rise}
+            custom={3}
+            initial="hidden"
+            animate="show"
+          >
+            <a
+              href="#projects"
+              className="link-underline text-sm font-medium text-foreground"
+            >
+              View selected work
+            </a>
+            <a
+              href="#contact"
+              className="link-underline text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              Get in touch
+            </a>
+            <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
-              Available for Hire
+              Available for work
             </span>
+          </motion.div>
+        </div>
+
+        {/* Right: the one 3D moment on the page */}
+        <motion.div
+          className="relative mx-auto aspect-square w-full max-w-[420px]"
+          variants={rise}
+          custom={2}
+          initial="hidden"
+          animate="show"
+          aria-hidden="true"
+        >
+          {reduceMotion ? (
+            <div className="flex h-full w-full items-center justify-center rounded-sm border border-border bg-secondary/60">
+              <span className="font-display text-7xl text-foreground/80">EC</span>
+            </div>
+          ) : (
+            <Suspense
+              fallback={
+                <div className="flex h-full w-full items-center justify-center">
+                  <span className="font-display text-6xl text-foreground/25">EC</span>
+                </div>
+              }
+            >
+              <HeroCanvas />
+            </Suspense>
+          )}
+          <span className="pointer-events-none absolute -bottom-2 right-0 select-none text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+            drag to rotate
           </span>
         </motion.div>
-
-        {/* Letter-by-letter name reveal */}
-        <motion.h1
-          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.05]"
-          variants={fadeUp}
-        >
-          {"Eddy Casas".split("").map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 50, rotateX: -90 }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 + i * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block"
-              style={{ transformOrigin: "bottom" }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
-        </motion.h1>
-
-        <motion.p
-          className="mt-4 text-lg sm:text-xl text-accent font-display font-medium h-8"
-          variants={fadeUp}
-        >
-          <Typewriter words={["Vibe Coding Specialist", "Full Stack Developer", "UI/UX Enthusiast", "Problem Solver"]} />
-        </motion.p>
-
-        <motion.p
-          className="mt-6 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto"
-          variants={fadeUp}
-        >
-          I build modern, performant web applications with clean code and intuitive user experiences.
-          Passionate about turning complex problems into elegant digital solutions.
-        </motion.p>
-
-
-        <motion.div
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-          variants={fadeUp}
-        >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-            <Button asChild size="lg" className="rounded-full px-8 font-semibold shadow-lg shadow-primary/25">
-              <a href="#projects">
-                <ArrowDown className="mr-2 h-4 w-4" />
-                View Projects
-              </a>
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-            <Button asChild variant="outline" size="lg" className="rounded-full px-8 font-semibold">
-              <a href="#contact">
-                <Send className="mr-2 h-4 w-4" />
-                Contact Me
-              </a>
-            </Button>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="mt-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-        >
-          <motion.div
-            className="mx-auto w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1.5"
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-primary"
-              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.div>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

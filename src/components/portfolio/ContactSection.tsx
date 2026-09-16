@@ -1,9 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Mail, Phone, MapPin, Github, Linkedin, ArrowUpRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 const info = [
@@ -17,16 +16,6 @@ const socials = [
   { icon: Linkedin, href: "https://www.linkedin.com/in/eddy-casas-72a07b364/", label: "LinkedIn" },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
-};
-
 export default function ContactSection() {
   const { toast } = useToast();
   const [sending, setSending] = useState(false);
@@ -36,7 +25,7 @@ export default function ContactSection() {
     setSending(true);
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    
+
     const payload = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
@@ -52,9 +41,9 @@ export default function ContactSection() {
       });
 
       if (response.ok) {
-        toast({ 
-          title: "Message sent!", 
-          description: "Thank you for reaching out. I'll get back to you soon!" 
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon!"
         });
         form.reset();
       } else {
@@ -69,8 +58,8 @@ export default function ContactSection() {
       }
     } catch (err) {
       console.error('Error sending message:', err);
-      toast({ 
-        title: "Error", 
+      toast({
+        title: "Error",
         description: "Something went wrong. Please try again or email me directly.",
         variant: "destructive"
       });
@@ -80,107 +69,112 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-24 px-5">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Get In Touch</h2>
-          <p className="mt-3 text-muted-foreground">Have a project in mind? Let's talk.</p>
-        </motion.div>
+    <section id="contact" className="border-t border-border px-5 py-24 sm:py-32">
+      <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
+        <div>
+          <p className="section-index">04 — Contact</p>
+          <h2 className="font-display mt-3 max-w-md text-3xl leading-tight tracking-tight sm:text-5xl">
+            Have a project in mind?
+          </h2>
+          <p className="mt-5 max-w-sm text-base leading-relaxed text-muted-foreground">
+            I'm open to full-time roles, freelance builds, and collaborations.
+            The form reaches me directly — I usually reply within a day.
+          </p>
 
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="space-y-8"
-          >
-            <div className="space-y-5">
-              {info.map(({ icon: Icon, label, href }) => (
-                <motion.div key={label} className="flex items-center gap-4">
-                  <motion.div
-                    className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10"
-                    whileHover={{ scale: 1.15, rotate: 5 }}
+          <ul className="mt-10 space-y-4">
+            {info.map(({ icon: Icon, label, href }) => (
+              <li key={label} className="flex items-center gap-3.5">
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                {href ? (
+                  <a
+                    href={href}
+                    className="link-underline text-sm text-muted-foreground hover:text-foreground"
                   >
-                    <Icon className="w-5 h-5 text-primary" />
-                  </motion.div>
-                  {href ? (
-                    <a href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {label}
-                    </a>
-                  ) : (
-                    <span className="text-sm text-muted-foreground">{label}</span>
-                  )}
-                </motion.div>
-              ))}
-            </div>
+                    {label}
+                  </a>
+                ) : (
+                  <span className="text-sm text-muted-foreground">{label}</span>
+                )}
+              </li>
+            ))}
+          </ul>
 
-            <motion.div className="flex gap-3">
-              {socials.map(({ icon: Icon, href, label }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-border hover:bg-secondary transition-colors"
-                  aria-label={label}
-                  whileHover={{ scale: 1.15, y: -3 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Icon className="w-5 h-5" />
-                </motion.a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <input
-              type="text"
-              name="website"
-              autoComplete="off"
-              tabIndex={-1}
-              aria-hidden="true"
-              className="sr-only"
-            />
-            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Input name="name" placeholder="Your Name" maxLength={120} required className="rounded-lg" />
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Input name="email" type="email" placeholder="Your Email" maxLength={254} required className="rounded-lg" />
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.01 }} whileFocus={{ scale: 1.01 }}>
-              <Textarea
-                name="message"
-                placeholder="Your Message"
-                rows={5}
-                maxLength={4000}
-                required
-                className="rounded-lg resize-none"
-              />
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Button type="submit" disabled={sending} className="rounded-full w-full font-semibold shadow-lg shadow-primary/20">
-                <Send className="mr-2 h-4 w-4" />
-                {sending ? "Sending..." : "Send Message"}
-              </Button>
-            </motion.div>
-          </motion.form>
+          <div className="mt-8 flex gap-6">
+            {socials.map(({ icon: Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline inline-flex items-center gap-1.5 text-sm font-medium"
+                aria-label={label}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="website"
+            autoComplete="off"
+            tabIndex={-1}
+            aria-hidden="true"
+            className="sr-only"
+          />
+          <div>
+            <label htmlFor="contact-name" className="section-index mb-2 block">
+              Name
+            </label>
+            <Input
+              id="contact-name"
+              name="name"
+              placeholder="Your name"
+              maxLength={120}
+              required
+              className="rounded-sm"
+            />
+          </div>
+          <div>
+            <label htmlFor="contact-email" className="section-index mb-2 block">
+              Email
+            </label>
+            <Input
+              id="contact-email"
+              name="email"
+              type="email"
+              placeholder="you@company.com"
+              maxLength={254}
+              required
+              className="rounded-sm"
+            />
+          </div>
+          <div>
+            <label htmlFor="contact-message" className="section-index mb-2 block">
+              Message
+            </label>
+            <Textarea
+              id="contact-message"
+              name="message"
+              placeholder="Tell me about the project..."
+              rows={6}
+              maxLength={4000}
+              required
+              className="resize-none rounded-sm"
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={sending}
+            className="w-full rounded-sm font-medium"
+          >
+            {sending ? "Sending..." : "Send message"}
+            <ArrowUpRight className="ml-2 h-4 w-4" />
+          </Button>
+        </form>
       </div>
     </section>
   );

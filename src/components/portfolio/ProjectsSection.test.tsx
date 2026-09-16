@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import ProjectsSection from "./ProjectsSection";
 import { projects, type MobileProject } from "./projects.data";
@@ -10,12 +10,6 @@ const mobileProject = projects.find(
 if (!mobileProject) {
   throw new Error("Expected at least one mobile project in projects.data.ts");
 }
-
-const originalStoreLinks = { ...mobileProject.storeLinks };
-
-afterEach(() => {
-  mobileProject.storeLinks = { ...originalStoreLinks };
-});
 
 describe("ProjectsSection", () => {
   it("renders the mobile featured project before web projects", () => {
@@ -36,28 +30,22 @@ describe("ProjectsSection", () => {
     expect(screen.getByText("Android")).toBeInTheDocument();
   });
 
-  it("renders store links only when present", () => {
-    mobileProject.storeLinks = { appStore: originalStoreLinks.appStore };
-
+  it("renders only the download link for mobile projects", () => {
     render(<ProjectsSection />);
 
-    expect(screen.getByRole("link", { name: /app store/i })).toBeInTheDocument();
+    const mobileCard = screen.getByTestId("mobile-project-card");
+
     expect(
-      screen.queryByRole("link", { name: /google play/i }),
-    ).not.toBeInTheDocument();
-  });
-
-  it("always renders case study for mobile projects", () => {
-    mobileProject.storeLinks = {};
-
-    render(<ProjectsSection />);
-
-    expect(screen.getByRole("link", { name: /case study/i })).toBeInTheDocument();
+      within(mobileCard).getByRole("link", { name: /download/i }),
+    ).toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: /app store/i }),
+      within(mobileCard).queryByRole("link", { name: /app store/i }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: /google play/i }),
+      within(mobileCard).queryByRole("link", { name: /google play/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(mobileCard).queryByRole("link", { name: /case study/i }),
     ).not.toBeInTheDocument();
   });
 
