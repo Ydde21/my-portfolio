@@ -44,22 +44,12 @@ function primaryLink(p: PortfolioProject): { href: string; label: string } {
     : { href: p.downloadUrl, label: "Download" };
 }
 
-/* Repo / store / case-study links — rendered only where they exist. */
+/* Repo links — rendered only where they exist. */
 function secondaryLinks(p: PortfolioProject): Array<{ href: string; label: string }> {
   if (p.kind === "web") {
     return p.repoUrl ? [{ href: p.repoUrl, label: "Repository" }] : [];
   }
-  const links: Array<{ href: string; label: string }> = [];
-  if (p.storeLinks.appStore) {
-    links.push({ href: p.storeLinks.appStore, label: "App Store" });
-  }
-  if (p.storeLinks.googlePlay) {
-    links.push({ href: p.storeLinks.googlePlay, label: "Google Play" });
-  }
-  if (p.caseStudyUrl) {
-    links.push({ href: p.caseStudyUrl, label: "Case study" });
-  }
-  return links;
+  return [];
 }
 
 const deck: DeckCard[] = orderedProjects.map((project) => ({
