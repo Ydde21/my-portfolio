@@ -5,9 +5,9 @@ export function useTheme() {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
       if (saved) return saved === "dark";
-      return false; // default to light mode
+      return true; // the portfolio is dark by design
     }
-    return false;
+    return true;
   });
 
   useEffect(() => {

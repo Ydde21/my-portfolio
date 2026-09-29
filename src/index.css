@@ -1,9 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap");
-
+/* Fonts are loaded via <link rel="preconnect"> + <link> in index.html —
+   keeps them off the CSS critical path. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Cinematic dark editorial system — the site is dark by design.
+   Light values are kept as a safety fallback only.
+------------------------------------------------------------------- */
 @layer base {
   :root {
     --background: 40 33% 98%;
@@ -49,44 +53,44 @@
   }
 
   .dark {
-    --background: 30 8% 8%;
-    --foreground: 40 20% 92%;
+    --background: 30 8% 7%;
+    --foreground: 40 18% 90%;
 
-    --card: 30 8% 8%;
-    --card-foreground: 40 20% 92%;
+    --card: 30 8% 7%;
+    --card-foreground: 40 18% 90%;
 
-    --popover: 30 8% 8%;
-    --popover-foreground: 40 20% 92%;
+    --popover: 30 8% 7%;
+    --popover-foreground: 40 18% 90%;
 
-    --primary: 40 20% 92%;
-    --primary-foreground: 30 8% 8%;
+    --primary: 40 18% 90%;
+    --primary-foreground: 30 8% 7%;
 
-    --secondary: 30 6% 14%;
-    --secondary-foreground: 40 20% 92%;
+    --secondary: 30 5% 12%;
+    --secondary-foreground: 40 18% 90%;
 
-    --muted: 30 6% 14%;
-    --muted-foreground: 40 8% 58%;
+    --muted: 30 5% 12%;
+    --muted-foreground: 30 7% 55%;
 
-    --accent: 16 80% 58%;
+    --accent: 16 78% 56%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 0 62% 42%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 30 6% 18%;
-    --input: 30 6% 18%;
-    --ring: 16 80% 58%;
+    --border: 30 5% 16%;
+    --input: 30 5% 18%;
+    --ring: 16 78% 56%;
 
-    --nav-blur: rgba(21, 20, 18, 0.85);
+    --nav-blur: rgba(15, 14, 12, 0.72);
 
-    --sidebar-background: 30 8% 8%;
-    --sidebar-foreground: 40 20% 92%;
-    --sidebar-primary: 40 20% 92%;
-    --sidebar-primary-foreground: 30 8% 8%;
-    --sidebar-accent: 30 6% 14%;
-    --sidebar-accent-foreground: 40 20% 92%;
-    --sidebar-border: 30 6% 18%;
-    --sidebar-ring: 16 80% 58%;
+    --sidebar-background: 30 8% 7%;
+    --sidebar-foreground: 40 18% 90%;
+    --sidebar-primary: 40 18% 90%;
+    --sidebar-primary-foreground: 30 8% 7%;
+    --sidebar-accent: 30 5% 12%;
+    --sidebar-accent-foreground: 40 18% 90%;
+    --sidebar-border: 30 5% 16%;
+    --sidebar-ring: 16 78% 56%;
   }
 }
 
@@ -95,10 +99,20 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: "Inter", sans-serif;
-    font-feature-settings: "ss01", "cv11";
+    font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    overflow-x: clip;
   }
 
   h1,
@@ -110,6 +124,16 @@
     font-family: "Fraunces", serif;
     font-weight: 500;
     letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  :focus-visible {
+    outline: 1px solid hsl(var(--accent));
+    outline-offset: 3px;
   }
 }
 
@@ -125,20 +149,27 @@
   text-wrap: balance;
 }
 
-/* Hairline rules used across the layout */
-.rule {
-  border-color: hsl(var(--border));
+/* Uppercase micro-label used for metadata across the site —
+   Plex Mono is the technical-studio voice of the system. */
+.meta-label {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
 }
 
-/* Subtle paper grain so flat color doesn't read as sterile */
-.grain::before {
+/* Film grain — a whisper of texture so flat black doesn't read sterile */
+.grain::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Underline reveal for nav + inline links */
@@ -165,14 +196,100 @@
   transform-origin: left;
 }
 
-/* Index-numeral label, e.g. "01 /" used above section titles */
+/* Index-numeral label, e.g. "01 —" used above section titles */
 .section-index {
-  font-family: "Inter", sans-serif;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
+}
+
+/* Featured preview: layered artifact resting on a ruled base */
+.preview-shadow {
+  box-shadow: 0 50px 110px -50px rgba(0, 0, 0, 0.9);
+}
+
+/* Static fallback behind / in place of the 3D hero centerpiece */
+.machine-fallback {
+  background:
+    radial-gradient(
+      46% 38% at 62% 40%,
+      hsl(var(--accent) / 0.16),
+      transparent 72%
+    ),
+    radial-gradient(
+      30% 30% at 38% 58%,
+      hsl(var(--foreground) / 0.05),
+      transparent 70%
+    );
+}
+
+/* ------------------------------------------------------------------
+   Magnetic controls — transform-only pull toward the pointer.
+   The CSS transition provides the weighted glide back to rest.
+------------------------------------------------------------------- */
+.magnetic {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ------------------------------------------------------------------
+   Accent fill sweep for primary actions. A single pseudo-element
+   translates up behind the label — transform/opacity only, so hover
+   never triggers layout or paint of the control itself.
+------------------------------------------------------------------- */
+.btn-sweep {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: hsl(var(--accent));
+  transform: translateY(101%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-sweep:hover::before,
+.btn-sweep:focus-visible::before {
+  transform: translateY(0);
+}
+
+.btn-sweep:hover,
+.btn-sweep:focus-visible {
+  border-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* ------------------------------------------------------------------
+   Kinetic strip — the line pauses when a reader engages with it, and
+   dissolves at the page edges instead of being clipped mid-letter.
+------------------------------------------------------------------- */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+
+.marquee-section:hover .marquee-section-track {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -184,4 +301,43 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ------------------------------------------------------------------
+   Scrollbar — themed. Chrome (unlike Safari's overlay scrollbars)
+   reserves a classic scrollbar gutter and, without color-scheme or
+   explicit styling, paints it in the OS light theme — a white strip
+   on the dark page. This renders a thin, translucent thumb over a
+   transparent track that picks up the page background instead.
+------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.4);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.6);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox equivalent (ignored by Chrome while ::-webkit-scrollbar is styled). */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.4) transparent;
 }

@@ -1,8 +1,8 @@
 import { Github, Linkedin, ArrowUp } from "lucide-react";
 
 const socials = [
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+  { icon: Github, href: "https://github.com/Ydde21", label: "GitHub" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/eddy-casas-72a07b364/", label: "LinkedIn" },
 ];
 
 function scrollToTop() {
@@ -11,12 +11,12 @@ function scrollToTop() {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border px-5 py-12">
+    <footer className="relative border-t border-border bg-background px-5 py-12 sm:px-8">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
         <div>
-          <p className="font-display text-xl tracking-tight">Eddy Casas</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Full Stack Developer — Bacolod City, Philippines
+          <p className="font-display text-xl tracking-tight">EDDY CASAS</p>
+          <p className="meta-label mt-2">
+            Software Developer — Bacolod City, PH
           </p>
         </div>
 
@@ -29,13 +29,19 @@ export default function Footer() {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-underline text-sm text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={s.label}
               >
                 <Icon className="h-4 w-4" />
               </a>
             );
           })}
+          <a
+            href="mailto:yddecsasas21@gmail.com"
+            className="link-underline text-sm text-muted-foreground hover:text-foreground"
+          >
+            Email
+          </a>
           <button
             onClick={scrollToTop}
             className="link-underline inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -44,12 +50,6 @@ export default function Footer() {
             Top
           </button>
         </div>
-      </div>
-
-      <div className="mx-auto mt-10 max-w-6xl border-t border-border pt-6">
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Eddy Casas. Designed and built by hand.
-        </p>
       </div>
     </footer>
   );

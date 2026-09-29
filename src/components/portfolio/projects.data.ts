@@ -1,14 +1,14 @@
-import hhHero from "@/assets/projects/havenharmony/hero.png";
+import hhHero from "@/assets/projects/havenharmony/hero.jpg";
 import hhDashboard from "@/assets/projects/havenharmony/dashboard.png";
-import hhRooms from "@/assets/projects/havenharmony/rooms.png";
+import hhRooms from "@/assets/projects/havenharmony/rooms.jpg";
 
 import swCharts from "@/assets/projects/savvywallet/chart.png";
 import swLogin from "@/assets/projects/savvywallet/login.png";
 import swTransactions from "@/assets/projects/savvywallet/entry.png";
 
-import anHero from "@/assets/projects/aniverse/hero.png";
+import anHero from "@/assets/projects/aniverse/hero.jpg";
 import anGenres from "@/assets/projects/aniverse/genres.png";
-import anTrending from "@/assets/projects/aniverse/trending.png";
+import anTrending from "@/assets/projects/aniverse/trending.jpg";
 
 import tmHome from "@/assets/projects/taskorbit-mobile/m1.jpg";
 import tmTasks from "@/assets/projects/taskorbit-mobile/m2.jpg";
@@ -17,13 +17,13 @@ import plPricing from "@/assets/projects/paylance/paylance3.png";
 import plInventory from "@/assets/projects/paylance/paylance2.png";
 import plInvoice from "@/assets/projects/paylance/paylance1.png";
 
-import sfHero from "@/assets/projects/sulitflight/sulitflight1.png";
+import sfHero from "@/assets/projects/sulitflight/sulitflight1.jpg";
 import sfResults from "@/assets/projects/sulitflight/sulitflight2.png";
 import sfFilters from "@/assets/projects/sulitflight/sulitflight3.png";
 import mfOverview from "@/assets/projects/mineflow/mineflow1.png";
 import mfBoards from "@/assets/projects/mineflow/mineflow2.png";
 import mfAnalytics from "@/assets/projects/mineflow/mineflow3.png";
-import afDashboard from "@/assets/projects/adforge/adforge1.png";
+import afDashboard from "@/assets/projects/adforge/adforge1.jpg";
 import afCampaigns from "@/assets/projects/adforge/adforge2.png";
 import afInsights from "@/assets/projects/adforge/adforge3.png";
 import spHome from "@/assets/projects/servicepass/servicepass1.png";
@@ -62,6 +62,10 @@ interface BaseProject {
   description: string;
   kind: ProjectKind;
   featured?: boolean;
+  /** Problem space, derived from the description (Fintech, Payroll, …). */
+  domain: string;
+  /** Two–three capabilities lifted verbatim-ish from the description. */
+  highlights: string[];
 }
 
 export interface WebProject extends BaseProject {
@@ -89,6 +93,12 @@ export const projects: PortfolioProject[] = [
       "A financial tracker app that helps users monitor income, expenses, savings, and loans with clear dashboards and actionable insights.",
     kind: "mobile",
     featured: true,
+    domain: "Fintech",
+    highlights: [
+      "Income, expenses, savings & loan tracking",
+      "Dashboards with actionable insights",
+      "Shipped to iOS and Android",
+    ],
     platforms: ["iOS", "Android"],
     screenshots: [
       { src: tmHome, alt: "SaveWise mobile home dashboard" },
@@ -110,6 +120,12 @@ export const projects: PortfolioProject[] = [
     description:
       "A comprehensive hotel management system with booking, room management, and guest services features. Built for seamless hospitality operations.",
     kind: "web",
+    domain: "Hospitality",
+    highlights: [
+      "Booking & room management",
+      "Guest services features",
+      "Built for hospitality operations",
+    ],
     images: [
       { src: hhHero, alt: "Haven Harmony landing page" },
       { src: hhDashboard, alt: "Haven Harmony management dashboard" },
@@ -122,6 +138,12 @@ export const projects: PortfolioProject[] = [
     description:
       "An all-in-one invoicing and business operations platform with client billing, inventory tracking, and PDF invoice workflows.",
     kind: "web",
+    domain: "Business Ops",
+    highlights: [
+      "Client billing & invoicing",
+      "Inventory tracking",
+      "PDF invoice workflows",
+    ],
     images: [
       {
         src: plPricing,
@@ -140,6 +162,12 @@ export const projects: PortfolioProject[] = [
     description:
       "A full-cycle Purchase Request and Budget Control System that streamlines procurement from draft to delivery through role-based approvals, budget reservation/release, PO creation, and immutable audit logs.",
     kind: "web",
+    domain: "Procurement",
+    highlights: [
+      "Role-based approvals, draft to delivery",
+      "Budget reservation & release",
+      "PO creation with immutable audit logs",
+    ],
     images: [
       { src: pdOverview, alt: "ProcureDesk dashboard and request overview" },
       { src: pdWorkflow, alt: "ProcureDesk approval workflow and queue view" },
@@ -152,6 +180,12 @@ export const projects: PortfolioProject[] = [
     description:
       "A full-stack Clinic Booking and Queue Management System that streamlines patient registration, appointment scheduling, walk-in handling, check-in, and real-time queue monitoring. It includes secure role-based access (Admin, Receptionist, Doctor, Patient), doctor consultation workflows, automated appointment reminders, analytics reports, and audit logs to improve clinic operations and reduce patient wait times.",
     kind: "web",
+    domain: "Healthcare",
+    highlights: [
+      "Registration, scheduling & walk-in check-in",
+      "Real-time queue monitoring",
+      "Role-based access — Admin to Patient",
+    ],
     images: [
       { src: cqOverview, alt: "Cliniqo clinic dashboard and activity overview" },
       { src: cqQueue, alt: "Cliniqo patient queue and check-in management view" },
@@ -167,6 +201,12 @@ export const projects: PortfolioProject[] = [
     description:
       "A mobile-first SaaS attendance and payroll platform built for Philippine businesses, designed to unify workforce operations in one secure system. It combines role-based employee management, geofenced clock-in/out, and attendance analytics with a phased path to fully compliant payroll processing, government contributions, tax calculations, payslips, and audit-ready controls.",
     kind: "web",
+    domain: "Payroll",
+    highlights: [
+      "Geofenced clock-in/out & analytics",
+      "Government contributions & tax calculations",
+      "Payslips with audit-ready controls",
+    ],
     images: [
       { src: tpOverview, alt: "TimePay PH dashboard and workforce overview" },
       {
@@ -182,6 +222,12 @@ export const projects: PortfolioProject[] = [
     description:
       "PayMatrix is a modern Philippine payroll system focused on accurate, compliance-ready payroll processing with biometric attendance import. It supports fingerprint log uploads (including ZKTeco and generic CSV), intelligent column mapping and punch pairing, then computes end-to-end payroll with SSS, PhilHealth, Pag-IBIG, TRAIN withholding tax, overtime/holiday pay, allowances, deductions, and exportable payroll results in a clean, role-ready web interface.",
     kind: "web",
+    domain: "Payroll",
+    highlights: [
+      "Biometric import — ZKTeco & CSV",
+      "SSS, PhilHealth, Pag-IBIG & TRAIN tax",
+      "Overtime, holiday pay & deductions",
+    ],
     images: [
       { src: pmOverview, alt: "PayMatrix payroll dashboard overview" },
       {
@@ -197,6 +243,11 @@ export const projects: PortfolioProject[] = [
     description:
       "A flight search web app focused on helping users find the cheapest available flight options quickly.",
     kind: "web",
+    domain: "Travel",
+    highlights: [
+      "Cheapest-first flight search",
+      "Results, pricing & filters",
+    ],
     images: [
       { src: sfHero, alt: "SulitFlights search page for flight deals" },
       { src: sfResults, alt: "SulitFlights flight results and pricing list" },
@@ -209,6 +260,12 @@ export const projects: PortfolioProject[] = [
     description:
       "An auto-reply system for Facebook live sellers that detects comment keywords, sends automated Messenger DMs, and continues the transaction flow until completion.",
     kind: "web",
+    domain: "Automation",
+    highlights: [
+      "Comment keyword detection",
+      "Automated Messenger DMs",
+      "Transaction flow to completion",
+    ],
     images: [
       { src: mfOverview, alt: "Mine Flow overview dashboard" },
       { src: mfBoards, alt: "Mine Flow project board and task management" },
@@ -221,6 +278,12 @@ export const projects: PortfolioProject[] = [
     description:
       "An ad campaign management web app for building creatives, launching campaigns, and monitoring performance insights.",
     kind: "web",
+    domain: "Ad Tech",
+    highlights: [
+      "Creative building",
+      "Campaign launching",
+      "Performance insights",
+    ],
     images: [
       { src: afDashboard, alt: "AdForge campaign dashboard overview" },
       { src: afCampaigns, alt: "AdForge active campaigns management screen" },
@@ -233,6 +296,12 @@ export const projects: PortfolioProject[] = [
     description:
       "A Civil Service Exam simulator with Study Mode and a timed Mock Exam experience modeled after the real CSE flow. Includes PayMongo payment gateway integration in test mode while business verification is pending.",
     kind: "web",
+    domain: "Education",
+    highlights: [
+      "Study Mode & timed Mock Exam",
+      "Modeled after the real CSE flow",
+      "PayMongo payments, test mode",
+    ],
     images: [
       { src: spHome, alt: "ServicePass PH exam simulator landing screen" },
       { src: spStudy, alt: "ServicePass PH study mode reviewer interface" },
@@ -248,6 +317,11 @@ export const projects: PortfolioProject[] = [
     description:
       "A pricing and profit-margin calculator for online sellers that estimates the right selling price based on costs, fees, and target profit so they can stay competitive without losing money.",
     kind: "web",
+    domain: "E-commerce",
+    highlights: [
+      "Selling-price estimation from costs & fees",
+      "Target profit-margin calculation",
+    ],
     images: [
       { src: ppDashboard, alt: "Presyo Pro Calculator dashboard overview" },
       { src: ppCalculator, alt: "Presyo Pro product pricing calculator" },
@@ -260,6 +334,11 @@ export const projects: PortfolioProject[] = [
     description:
       "A smart finance and expense tracker that helps users manage budgets, track spending, and visualize financial goals with intuitive charts.",
     kind: "web",
+    domain: "Fintech",
+    highlights: [
+      "Budget management & spending tracking",
+      "Financial-goal charts",
+    ],
     images: [
       { src: swCharts, alt: "Savvy Wallet financial chart view" },
       { src: swLogin, alt: "Savvy Wallet login screen" },
@@ -272,6 +351,12 @@ export const projects: PortfolioProject[] = [
     description:
       "An anime art platform where artists can showcase, share, and discover artwork. Features galleries, community interactions, and curated collections.",
     kind: "web",
+    domain: "Community",
+    highlights: [
+      "Showcase, share & discover artwork",
+      "Galleries & community interactions",
+      "Curated collections",
+    ],
     images: [
       { src: anHero, alt: "Aniverse Canvas hero artwork section" },
       { src: anGenres, alt: "Aniverse Canvas genre explorer" },

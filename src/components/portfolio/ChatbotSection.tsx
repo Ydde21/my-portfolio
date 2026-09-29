@@ -163,14 +163,14 @@ export default function ChatbotSection() {
             type="button"
             aria-label="Open chatbot"
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-5 right-5 z-[70] group inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary px-4 py-3 text-primary-foreground shadow-[0_16px_40px_-18px_hsl(var(--primary)/0.75)] transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="fixed bottom-5 right-5 z-[70] group inline-flex items-center gap-2 border border-border bg-card/90 px-4 py-3 text-foreground shadow-[0_16px_40px_-18px_rgba(0,0,0,0.6)] backdrop-blur-md transition-colors duration-300 hover:border-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             initial={{ opacity: 0, scale: 0.85, y: 18 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <MessageCircle className="h-5 w-5" />
-            <span className="text-sm font-semibold hidden sm:inline">Chatbot</span>
+            <MessageCircle className="h-5 w-5 text-accent" />
+            <span className="meta-label hidden !text-foreground sm:inline">Chatbot</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -179,18 +179,18 @@ export default function ChatbotSection() {
         {isOpen && (
           <motion.section
             aria-label="Portfolio chatbot"
-            className="fixed bottom-3 left-3 right-3 z-[75] h-[72vh] max-h-[620px] rounded-2xl border border-border/70 bg-card/95 shadow-[0_25px_80px_-35px_hsl(var(--foreground)/0.45)] backdrop-blur-xl sm:bottom-5 sm:left-auto sm:right-5 sm:w-[390px]"
+            className="fixed bottom-3 left-3 right-3 z-[75] h-[72vh] max-h-[620px] border border-border/70 bg-card/95 shadow-[0_25px_80px_-35px_hsl(var(--foreground)/0.45)] backdrop-blur-xl sm:bottom-5 sm:left-auto sm:right-5 sm:w-[390px]"
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
           >
-            <div className="h-full rounded-2xl overflow-hidden flex flex-col">
-              <div className="relative border-b border-border/70 px-4 py-3 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
+            <div className="h-full overflow-hidden flex flex-col">
+              <div className="relative border-b border-border/70 px-4 py-3 bg-gradient-to-r from-accent/10 via-accent/5 to-transparent">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center">
-                      <Bot className="h-4 w-4 text-primary" />
+                    <div className="w-9 h-9 rounded-sm bg-accent/15 flex items-center justify-center">
+                      <Bot className="h-4 w-4 text-accent" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-foreground">Portfolio Assistant</p>
@@ -201,7 +201,7 @@ export default function ChatbotSection() {
                     type="button"
                     onClick={() => setIsOpen(false)}
                     aria-label="Minimize chatbot"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background/80 text-muted-foreground hover:text-foreground transition-colors"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-border bg-background/80 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Minimize2 className="h-4 w-4" />
                   </button>
@@ -217,7 +217,7 @@ export default function ChatbotSection() {
                   return (
                     <div key={message.id} className={`flex ${isAssistant ? "justify-start" : "justify-end"}`}>
                       <div
-                        className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                        className={`max-w-[88%] rounded-sm px-3.5 py-2.5 text-sm leading-relaxed ${
                           isAssistant
                             ? "bg-secondary text-secondary-foreground border border-border"
                             : "bg-primary text-primary-foreground shadow-sm"
@@ -230,7 +230,7 @@ export default function ChatbotSection() {
                 })}
                 {sending && (
                   <div className="flex justify-start">
-                    <div className="inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 bg-secondary text-secondary-foreground border border-border text-sm">
+                    <div className="inline-flex items-center gap-2 rounded-sm px-3.5 py-2.5 bg-secondary text-secondary-foreground border border-border text-sm">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Thinking...
                     </div>
@@ -246,7 +246,7 @@ export default function ChatbotSection() {
                       type="button"
                       disabled={sending}
                       onClick={() => handlePromptClick(prompt)}
-                      className="shrink-0 text-xs px-3 py-1.5 rounded-full border border-border bg-background hover:bg-secondary transition-colors disabled:opacity-60"
+                      className="shrink-0 text-xs px-3 py-1.5 rounded-sm border border-border bg-background hover:bg-secondary transition-colors disabled:opacity-60"
                     >
                       {prompt}
                     </button>
@@ -266,7 +266,7 @@ export default function ChatbotSection() {
                     maxLength={MAX_MESSAGE_LENGTH}
                     rows={2}
                     placeholder="Ask about projects, skills, experience, or contact..."
-                    className="resize-none rounded-xl"
+                    className="resize-none rounded-sm"
                     disabled={sending}
                   />
                   <div className="flex items-center justify-between gap-3">
@@ -276,7 +276,7 @@ export default function ChatbotSection() {
                     <Button
                       type="submit"
                       disabled={sending || messageInput.trim().length === 0}
-                      className="rounded-full h-9 px-4"
+                      className="rounded-sm h-9 px-4"
                     >
                       {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                     </Button>
