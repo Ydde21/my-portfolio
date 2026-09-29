@@ -46,6 +46,7 @@ Project Values:
 - Clean Code, Fast Delivery, Modern Design
 
 Projects:
+- NotchMeter (macOS): notch overlay showing AI subscription usage for Claude, ChatGPT, and Cursor; https://github.com/Ydde21/NotchMeter
 - SaveWise (mobile): financial tracker; https://github.com/Ydde21/SaveWise/releases/tag/SaveWise ; case study https://savvy-wallet.lovable.app
 - Haven Harmony: hotel management system; https://havenharmony.lovable.app
 - Paylance: invoicing + inventory + PDF workflows; https://paylance.lovable.app
@@ -82,6 +83,7 @@ const SCOPE_TERMS = [
   "linkedin",
   "bacolod",
   "philippines",
+  "notchmeter",
   "savewise",
   "haven harmony",
   "paylance",

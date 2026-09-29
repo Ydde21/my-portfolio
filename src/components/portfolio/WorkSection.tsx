@@ -29,7 +29,7 @@ const orderedProjects: PortfolioProject[] = [...projects].sort(
 interface DeckCard {
   project: PortfolioProject;
   shot: ProjectScreenshot;
-  link: { href: string; label: string };
+  link: { href: string; label: string } | null;
   secondary: Array<{ href: string; label: string }>;
   tag: string;
 }
@@ -38,16 +38,19 @@ function firstShot(p: PortfolioProject): ProjectScreenshot {
   return p.kind === "web" ? p.images[0] : p.screenshots[0];
 }
 
-function primaryLink(p: PortfolioProject): { href: string; label: string } {
-  return p.kind === "web"
-    ? { href: p.liveUrl, label: "View live" }
-    : { href: p.downloadUrl, label: "Download" };
+function primaryLink(p: PortfolioProject): { href: string; label: string } | null {
+  if (p.kind === "web") {
+    if (p.liveUrl) return { href: p.liveUrl, label: "View live" };
+    if (p.repoUrl) return { href: p.repoUrl, label: "Repository" };
+    return null;
+  }
+  return { href: p.downloadUrl, label: "Download" };
 }
 
-/* Repo links — rendered only where they exist. */
+/* Repo links — rendered only where they exist and aren't the primary CTA. */
 function secondaryLinks(p: PortfolioProject): Array<{ href: string; label: string }> {
   if (p.kind === "web") {
-    return p.repoUrl ? [{ href: p.repoUrl, label: "Repository" }] : [];
+    return p.repoUrl && p.liveUrl ? [{ href: p.repoUrl, label: "Repository" }] : [];
   }
   return [];
 }
@@ -62,7 +65,9 @@ const deck: DeckCard[] = orderedProjects.map((project) => ({
       ? "Mobile App"
       : project.title === "TimePay PH"
         ? "Mobile-first SaaS"
-        : "Web App",
+        : project.title === "NotchMeter"
+          ? "macOS App"
+          : "Web App",
 }));
 
 /* Clamp a 0..1 scroll progress into a segment's local 0..1 progress */
@@ -73,17 +78,19 @@ function useSegment(progress: MotionValue<number>, start: number, end: number) {
 function CardLinks({ card }: { card: DeckCard }) {
   return (
     <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-      <Magnetic strength={0.24}>
-        <a
-          href={card.link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-sweep group inline-flex items-center gap-2 border border-foreground/25 px-5 py-2.5 text-xs font-medium text-foreground transition-colors duration-300 sm:text-sm"
-        >
-          {card.link.label}
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </a>
-      </Magnetic>
+      {card.link && (
+        <Magnetic strength={0.24}>
+          <a
+            href={card.link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-sweep group inline-flex items-center gap-2 border border-foreground/25 px-5 py-2.5 text-xs font-medium text-foreground transition-colors duration-300 sm:text-sm"
+          >
+            {card.link.label}
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        </Magnetic>
+      )}
       {card.secondary.map((s) => (
         <a
           key={s.label}

@@ -44,6 +44,9 @@ import tpPayroll from "@/assets/projects/timepay/timepay3.png.png";
 import pmOverview from "@/assets/projects/paymatrix/paymatrix1.png";
 import pmImport from "@/assets/projects/paymatrix/paymatrix2.png.png";
 import pmResults from "@/assets/projects/paymatrix/paymatrix3.png.png";
+import nmPanelWide from "@/assets/projects/notchmeter/notchmeter1.jpg";
+import nmPanelDetail from "@/assets/projects/notchmeter/notchmeter2.jpg";
+import nmPill from "@/assets/projects/notchmeter/notchmeter3.jpg";
 
 export type ProjectKind = "web" | "mobile";
 
@@ -71,7 +74,7 @@ interface BaseProject {
 export interface WebProject extends BaseProject {
   kind: "web";
   images: ProjectScreenshot[];
-  liveUrl: string;
+  liveUrl?: string;
   repoUrl?: string;
 }
 
@@ -87,6 +90,34 @@ export interface MobileProject extends BaseProject {
 export type PortfolioProject = WebProject | MobileProject;
 
 export const projects: PortfolioProject[] = [
+  {
+    title: "NotchMeter",
+    description:
+      "A Dynamic-Island-style overlay that lives in the MacBook notch and shows how much of each AI subscription has been burned — Claude, ChatGPT, and Cursor usage at a glance, with per-window usage bars, reset countdowns, plan badges, and credit balances.",
+    kind: "web",
+    featured: true,
+    domain: "Developer Tools",
+    highlights: [
+      "Collapsed pill shows the most-consumed provider",
+      "Hover expands per-provider usage bars & reset countdowns",
+      "Polls Claude, ChatGPT & Cursor every 60s",
+    ],
+    images: [
+      {
+        src: nmPanelWide,
+        alt: "NotchMeter expanded panel in the macOS menu bar showing Claude, ChatGPT, and Cursor usage",
+      },
+      {
+        src: nmPanelDetail,
+        alt: "NotchMeter usage panel with plan badges, credit balances, and reset countdowns",
+      },
+      {
+        src: nmPill,
+        alt: "NotchMeter collapsed notch pill showing Cursor at 88 percent",
+      },
+    ],
+    repoUrl: "https://github.com/Ydde21/NotchMeter",
+  },
   {
     title: "SaveWise",
     description:
