@@ -36,7 +36,9 @@ function createMessage(role: ChatRole, content: string): ChatMessage {
 export default function ChatbotSection() {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([createMessage("assistant", STARTER_REPLY)]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    createMessage("assistant", STARTER_REPLY),
+  ]);
   const [messageInput, setMessageInput] = useState("");
   const [sending, setSending] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -125,7 +127,10 @@ export default function ChatbotSection() {
           ? data.reply.trim()
           : "I can only answer questions related to this portfolio system.";
 
-      setMessages((prev) => [...prev, createMessage("assistant", assistantReply)]);
+      setMessages((prev) => [
+        ...prev,
+        createMessage("assistant", assistantReply),
+      ]);
     } catch (error) {
       console.error("Chatbot request failed.", error);
       const errorMessage =
@@ -163,14 +168,14 @@ export default function ChatbotSection() {
             type="button"
             aria-label="Open chatbot"
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-5 right-5 z-[70] group inline-flex items-center gap-2 border border-border bg-card/90 px-4 py-3 text-foreground shadow-[0_16px_40px_-18px_rgba(0,0,0,0.6)] backdrop-blur-md transition-colors duration-300 hover:border-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="fixed bottom-5 right-5 z-[70] group inline-flex items-center gap-2 rounded-full border border-border bg-card/90 p-3.5 text-foreground shadow-[0_16px_40px_-18px_rgba(0,0,0,0.6)] backdrop-blur-md transition-colors duration-300 hover:border-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             initial={{ opacity: 0, scale: 0.85, y: 18 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
             <MessageCircle className="h-5 w-5 text-accent" />
-            <span className="meta-label hidden !text-foreground sm:inline">Chatbot</span>
+            <span className="sr-only">Chatbot</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -193,8 +198,12 @@ export default function ChatbotSection() {
                       <Bot className="h-4 w-4 text-accent" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-foreground">Portfolio Assistant</p>
-                      <p className="text-xs text-muted-foreground">Professional portfolio support</p>
+                      <p className="text-sm font-semibold text-foreground">
+                        Portfolio Assistant
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Professional portfolio support
+                      </p>
                     </div>
                   </div>
                   <button
@@ -215,7 +224,10 @@ export default function ChatbotSection() {
                 {messages.map((message) => {
                   const isAssistant = message.role === "assistant";
                   return (
-                    <div key={message.id} className={`flex ${isAssistant ? "justify-start" : "justify-end"}`}>
+                    <div
+                      key={message.id}
+                      className={`flex ${isAssistant ? "justify-start" : "justify-end"}`}
+                    >
                       <div
                         className={`max-w-[88%] rounded-sm px-3.5 py-2.5 text-sm leading-relaxed ${
                           isAssistant
@@ -278,7 +290,11 @@ export default function ChatbotSection() {
                       disabled={sending || messageInput.trim().length === 0}
                       className="rounded-sm h-9 px-4"
                     >
-                      {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                      {sending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </form>

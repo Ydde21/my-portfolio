@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen",
+  "assets": [
+    {
+      "name": "nudge",
+      "prompt": "Use case: stylized-concept. Asset type: cinematic abstract background for a premium iOS reminder product showcase. Create a landscape 3:2 luxury studio render, a monumental flowing ribbon of translucent amber-orange glass, like a soft sound wave or gentle reminder, sweeping diagonally behind an empty central area. Macro caustics and tiny surface texture, warm honey rim light, deep espresso-black background, editorial Apple campaign craftsmanship, physically believable optical glass and soft shadow. Composition: most sculptural detail on far left and right edges and lower third, leave center quiet and dark for composited product UI. Restrained, sophisticated, tactile, luminous orange #ff8a35 and burnt copper, warm cream light on glass edges. No product devices, no text, no letters, no logo, no icons, no UI, no stars, no sci-fi clutter. This is a full bleed background plate for real product interface overlays."
+    },
+    {
+      "name": "nivra",
+      "prompt": "Use case: stylized-concept. Asset type: cinematic abstract background for a premium macOS attention product showcase. Landscape 3:2 luxury studio render of one sculptural folded sheet of smoke-violet optical glass, broad thin silvery iridescent arcs flowing horizontally from far left to right, precision and quiet focus. Very deep midnight navy ground, subtle purple-lavender and ice-blue rim lighting, physically believable frosted glass with fine material texture, gentle haze and soft shadow, high-end editorial product campaign. Center and upper center quiet and dark for a composited laptop preview. Sculptural details mostly in lower third and edges. Cohesive, restrained, spacious, expensive. No laptop, no devices, no text, no letters, no logo, no icons, no UI, no stars, no sci-fi clutter. Full bleed background plate for real interface overlays."
+    },
+    {
+      "name": "recurr",
+      "prompt": "Use case: stylized-concept. Asset type: cinematic abstract background for a premium developer incident replay platform. Landscape 3:2 luxury studio render of a sculptural loop made of dark brushed graphite with a thin luminous mint-green glass inner edge, a visual metaphor for replay, angled in perspective and partially cropped at the lower right edge. Layered looping trace returning on itself, physically believable dark metal, soft mint caustic highlights, black charcoal studio ground and subtle volumetric light. High-end editorial industrial design campaign. Leave broad quiet dark area across upper half and center to overlay a real dashboard. Restrained small green #8ee5bc accents, dark material detail. No computer, no screens, no devices, no text, no letters, no logo, no icons, no UI, no sci-fi clutter. A background plate only."
+    }
+  ]
+}

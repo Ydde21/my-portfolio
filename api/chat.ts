@@ -46,6 +46,9 @@ Project Values:
 - Clean Code, Fast Delivery, Modern Design
 
 Projects:
+- Nudge (iOS): Dynamic Island-first reminders with Live Activities, Lock Screen Done/snooze actions, recurring local notifications, and on-device SwiftData storage. Featured project; no public store or release link is provided.
+- Nivra (macOS): notch attention utility that ranks calendar events, local coding-agent activity, and GitHub CI failures on-device, surfacing one priority item with a hover queue and contextual actions; https://nivra-dev.vercel.app ; source https://github.com/Ydde21/Nivra
+- Recurr (web / Node.js developer tooling): open-source production incident capture, deterministic local replay, execution diffs, and saved regression scenarios to verify fixes; https://recurr-dev.vercel.app ; source https://github.com/Ydde21/recurr
 - NotchMeter (macOS): notch overlay showing AI subscription usage for Claude, ChatGPT, and Cursor; https://github.com/Ydde21/NotchMeter
 - SaveWise (mobile): financial tracker; https://github.com/Ydde21/SaveWise/releases/tag/SaveWise ; case study https://savvy-wallet.lovable.app
 - Haven Harmony: hotel management system; https://havenharmony.lovable.app
@@ -83,6 +86,9 @@ const SCOPE_TERMS = [
   "linkedin",
   "bacolod",
   "philippines",
+  "nudge",
+  "nivra",
+  "recurr",
   "notchmeter",
   "savewise",
   "haven harmony",

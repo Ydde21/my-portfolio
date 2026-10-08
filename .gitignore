@@ -26,3 +26,7 @@ dist-ssr
 
 # Build artifacts
 tsconfig.*.tsbuildinfo
+
+# Local browser QA and asset-processing scratch files
+.playwright-cli/
+output/playwright/

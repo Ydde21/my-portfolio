@@ -1,24 +1,33 @@
-/* Temporary smoke test — verifies the component mounts and renders the
-   machine-fallback div when WebGL is unavailable (jsdom). */
-import { describe, expect, it } from "vitest";
-import { createElement } from "react";
-import { createRoot } from "react-dom/client";
-import { act } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
 import ExperienceCanvas from "./ExperienceCanvas";
+import HeroSection from "@/components/portfolio/HeroSection";
 
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 describe("ExperienceCanvas", () => {
-  it("mounts and falls back gracefully without WebGL", async () => {
-    const host = document.createElement("div");
-    document.body.appendChild(host);
-    const root = createRoot(host);
-    await act(async () => {
-      root.render(createElement(ExperienceCanvas));
-    });
-    const el = host.querySelector(".machine-fallback");
-    expect(el).toBeTruthy();
-    await act(async () => {
-      root.unmount();
-    });
-    document.body.removeChild(host);
+  it("keeps the same model's static portrait and portfolio content without WebGL", () => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { container } = render(
+      <>
+        <ExperienceCanvas />
+        <HeroSection />
+      </>,
+    );
+    expect(container.querySelector(".robot-fallback")).toHaveAttribute(
+      "src",
+      "/robot-preview.webp",
+    );
+    expect(container.querySelector("canvas")).toBeNull();
+    expect(document.documentElement.dataset.robotReady).toBeUndefined();
+    expect(
+      screen.getByRole("link", { name: "Explore my work" }),
+    ).toHaveAttribute("href", "#work");
+    expect(error).toHaveBeenCalledWith(
+      "THREE.WebGLRenderer: Error creating WebGL context.",
+    );
   });
 });

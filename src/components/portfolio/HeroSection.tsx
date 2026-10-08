@@ -1,159 +1,153 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Eye } from "lucide-react";
-import Magnetic from "./Magnetic";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-/* Slow, deliberate rise used for the hero load sequence. The stagger is
-   offset so the typography is still arriving as the preloader wipes
-   away — a progressive reveal rather than a cut. Reduced motion gets the
-   same choreography compressed to nearly nothing. */
-const riseVariants = (reduce: boolean) => ({
-  hidden: { opacity: 0, y: 28 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: reduce ? 0.45 : 0.9,
-      delay: reduce ? 0.04 + i * 0.05 : 0.5 + i * 0.12,
-      ease: EASE,
-    },
-  }),
-});
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+} from "framer-motion";
+import { ArrowDown, ArrowUpRight, Asterisk, FileText } from "lucide-react";
+import { useMediaQuery, useReducedMotion } from "@/hooks/useMediaQuery";
+import RobotInteraction from "./RobotInteraction";
 
 export default function HeroSection() {
-  const reduceMotion = useReducedMotion();
-  const rise = riseVariants(Boolean(reduceMotion));
-
+  const ref = useRef<HTMLElement>(null);
+  const intro = useRef<HTMLDivElement>(null);
+  const [introVisible, setIntroVisible] = useState(true);
+  const reduced = useReducedMotion();
+  const cinematic =
+    useMediaQuery("(min-width: 960px) and (min-height: 650px)") && !reduced;
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  const y = useTransform(scrollYProgress, [0, 0.8], [0, -150]);
+  const opacity = useTransform(scrollYProgress, [0, 0.32, 0.5], [1, 1, 0]);
+  const nextOpacity = useTransform(scrollYProgress, [0.56, 0.78, 1], [0, 1, 1]);
+  const nextY = useTransform(scrollYProgress, [0.45, 0.8], [70, 0]);
+  useMotionValueEvent(scrollYProgress, "change", (value) =>
+    setIntroVisible(value < 0.52),
+  );
+  useEffect(() => {
+    if (intro.current) intro.current.inert = cinematic && !introVisible;
+  }, [cinematic, introVisible]);
   return (
     <section
+      ref={ref}
       id="home"
-      data-scene="hero"
-      className="relative flex min-h-screen flex-col overflow-hidden"
+      className="hero-experience"
       aria-label="Introduction"
     >
-      {/* The fixed 3D scene is the hero visual — this section is transparent.
-          Scrims keep the type legible: a full dim on portrait screens (where
-          the machine sits behind the copy) and a floor fade on all sizes. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 bg-background/60 md:hidden"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-44 bg-gradient-to-t from-background to-transparent"
-      />
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-5 pb-28 pt-32 sm:px-8 sm:pt-36">
-        <motion.div
-          className="flex items-center gap-3"
-          variants={rise}
-          custom={0}
-          initial="hidden"
-          animate="show"
-        >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-          </span>
-          <p className="meta-label">Available for work — Bacolod City, PH</p>
-        </motion.div>
-
-        <motion.h1
-          className="font-display mt-8 text-[clamp(3.5rem,11vw,8.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
-          variants={rise}
-          custom={1}
-          initial="hidden"
-          animate="show"
-        >
-          EDDY
-          <br />
-          CASAS
-        </motion.h1>
-
-        <motion.p
-          className="meta-label mt-6 !text-accent"
-          variants={rise}
-          custom={2}
-          initial="hidden"
-          animate="show"
-        >
-          Software Developer
-        </motion.p>
-
-        <motion.p
-          className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg"
-          variants={rise}
-          custom={3}
-          initial="hidden"
-          animate="show"
-        >
-          I design and build practical web applications, business systems, and
-          software products — from database schema to the last hover state.
-        </motion.p>
-
-        <motion.div
-          className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-5"
-          variants={rise}
-          custom={4}
-          initial="hidden"
-          animate="show"
-        >
-          <Magnetic strength={0.3}>
-            <a
-              href="#work"
-              className="btn-sweep group inline-flex items-center gap-2 border border-foreground/25 px-6 py-3.5 text-sm font-medium text-foreground transition-colors duration-300"
+      <div className="hero-sticky">
+        <div className="hero-atmosphere" aria-hidden="true">
+          <div className="aurora aurora-one" />
+          <div className="aurora aurora-two" />
+          <div className="hero-gridlines" />
+        </div>
+        <div className="hero-layout page-shell">
+          <motion.div
+            ref={intro}
+            aria-hidden={cinematic && !introVisible}
+            className="hero-intro"
+            style={cinematic ? { y, opacity } : undefined}
+          >
+            <motion.p
+              className="eyebrow"
+              initial={reduced ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
             >
-              View selected work
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
-          </Magnetic>
-          <Magnetic strength={0.18}>
-            <a
-              href="#contact"
-              className="link-underline text-sm font-medium text-muted-foreground hover:text-foreground"
+              <span className="status-dot" /> EDDY CASAS · SOFTWARE DEVELOPER
+            </motion.p>
+            <h1 aria-label="Software. With soul.">
+              {["Software.", "With soul."].map((line, i) => (
+                <span className="title-mask" key={line}>
+                  <motion.span
+                    initial={reduced ? false : { y: "110%", rotate: 4 }}
+                    animate={{ y: 0, rotate: 0 }}
+                    transition={{
+                      duration: 1.1,
+                      delay: 0.12 + i * 0.12,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={i === 1 ? "muted-title" : ""}
+                  >
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+            <motion.div
+              className="hero-description-group"
+              initial={reduced ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.8 }}
             >
-              Get in touch
-            </a>
-          </Magnetic>
-          <Magnetic strength={0.18}>
-            <a
-              href="/CasasEddy.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-underline inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-              aria-label="View resume"
-            >
-              <Eye className="h-4 w-4" />
-              View resume
-            </a>
-          </Magnetic>
-        </motion.div>
+              <p className="hero-description">
+                I turn ideas into practical applications, business systems, and
+                thoughtfully crafted digital experiences.
+              </p>
+              <div className="hero-actions">
+                <a href="#work" className="pill-button">
+                  Explore my work <ArrowUpRight size={18} />
+                </a>
+                <a
+                  href="/CasasEddy.pdf"
+                  className="pill-button resume-button"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FileText size={18} aria-hidden="true" /> View résumé
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            className="hero-next"
+            aria-hidden="true"
+            style={{
+              opacity: reduced ? 0 : nextOpacity,
+              y: reduced ? 0 : nextY,
+            }}
+          >
+            <span className="eyebrow">THOUGHT THROUGH. BUILT THROUGH.</span>
+            <h2>
+              From the first idea.
+              <br />
+              <span>
+                To the final
+                <br />
+                interaction.
+              </span>
+            </h2>
+          </motion.div>
+          <div className="hero-stage">
+            <div className="stage-halo" aria-hidden="true" />
+            <span className="floating-label label-one">
+              <span className="status-dot" /> A little personality.
+            </span>
+            <RobotInteraction />
+            <span className="floating-label label-two">
+              <Asterisk size={16} /> A lot of possibility.
+            </span>
+          </div>
+        </div>
+        <div className="hero-bottom page-shell">
+          <a href="#work" className="scroll-prompt">
+            <span>
+              <ArrowDown size={16} />
+            </span>
+            SCROLL TO DISCOVER
+          </a>
+          <p>
+            BASED IN BACOLOD CITY, PH
+            <br />
+            <span>Building for wherever you are.</span>
+          </p>
+          <a className="hero-bottom-link" href="#contact">
+            Let’s talk <ArrowUpRight size={14} />
+          </a>
+        </div>
       </div>
-
-      {/* Bottom metadata strip — the scroll cue sits centred, clear of the
-          fixed chatbot launcher in the corner */}
-      <motion.div
-        className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 border-t border-border/70 px-5 py-5 sm:px-8"
-        variants={rise}
-        custom={5}
-        initial="hidden"
-        animate="show"
-      >
-        <p className="meta-label">Full Stack — Web &amp; Mobile</p>
-        <a
-          href="#work"
-          className="meta-label inline-flex items-center gap-2 !text-foreground/80 hover:!text-foreground"
-          aria-label="Scroll to work section"
-        >
-          Scroll
-          <span className="inline-block h-px w-8 bg-current" aria-hidden="true" />
-        </a>
-        <p className="meta-label hidden justify-self-end sm:block">
-          Bacolod City, PH
-        </p>
-      </motion.div>
     </section>
   );
 }

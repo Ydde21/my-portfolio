@@ -1,7 +1,6 @@
 /**
  * Device quality tier — decided once at mount. Coarse pointers and
- * small viewports get the lighter tier: fewer particles, smaller
- * shadow maps, a lower pixel-ratio cap. Pointer steering is only
+ * small viewports get a lower pixel-ratio cap. Pointer steering is only
  * offered to devices with a fine pointer.
  */
 
@@ -9,13 +8,10 @@ export interface QualityTier {
   isMobile: boolean;
   pointerSteering: boolean;
   pixelRatioCap: number;
-  particleCount: number;
-  shadowMapSize: number;
 }
 
 export function detectQuality(): QualityTier {
-  const coarse =
-    window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
   const small = Math.min(window.innerWidth, window.innerHeight) < 760;
   const lowDpr = (window.devicePixelRatio || 1) < 1.25;
   const isMobile = coarse || small;
@@ -23,8 +19,6 @@ export function detectQuality(): QualityTier {
     isMobile,
     pointerSteering: !coarse,
     pixelRatioCap: isMobile || lowDpr ? 1.5 : 1.75,
-    particleCount: isMobile ? 60 : 150,
-    shadowMapSize: isMobile ? 512 : 1024,
   };
 }
 

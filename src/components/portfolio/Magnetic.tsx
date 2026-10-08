@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
 /**

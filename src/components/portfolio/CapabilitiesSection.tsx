@@ -1,66 +1,63 @@
+import { useReducedMotion } from "@/hooks/useMediaQuery";
 import { motion } from "framer-motion";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-/* Grounded in the shipped project list — payroll, procurement, clinic
-   operations, store-listed mobile, and end-to-end product builds. */
+import { ArrowUpRight, Code2, Layers3, Smartphone } from "lucide-react";
 const capabilities = [
   {
-    index: "01",
-    title: "Product Engineering",
+    icon: Code2,
+    title: "Product engineering",
     line: "Product-grade web applications end to end — from database schema to the last hover state.",
+    tags: ["Architecture", "Interfaces", "Delivery"],
   },
   {
-    index: "02",
-    title: "Business Systems",
+    icon: Layers3,
+    title: "Business systems",
     line: "Payroll, procurement, and clinic operations — real systems with approvals, audit logs, and compliance.",
+    tags: ["Workflows", "Operations", "Data"],
   },
   {
-    index: "03",
-    title: "Mobile",
+    icon: Smartphone,
+    title: "Mobile experiences",
     line: "React Native apps designed, built, and shipped to the App Store and Google Play.",
+    tags: ["React Native", "iOS", "Android"],
   },
 ];
-
 export default function CapabilitiesSection() {
+  const reduced = useReducedMotion();
   return (
     <section
+      className="capabilities-section page-shell"
       aria-label="What I build"
-      className="relative border-t border-border bg-background px-5 py-28 sm:py-36"
     >
-      <div className="mx-auto max-w-6xl">
-        <motion.div
-          className="mb-14 sm:mb-16"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.65, ease: EASE }}
-        >
-          <h2 className="font-display max-w-md text-4xl leading-[1.05] tracking-tight sm:text-5xl">
-            What I build.
-          </h2>
-        </motion.div>
-
-        <div className="divide-y divide-border border-y border-border">
-          {capabilities.map((cap, i) => (
-            <motion.div
-              key={cap.index}
-              className="group grid gap-3 py-8 sm:grid-cols-[4rem_1fr_1.4fr] sm:items-baseline sm:gap-10 sm:py-12"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.07, ease: EASE }}
-            >
-              <p className="section-index text-accent">{cap.index}</p>
-              <h3 className="font-display text-2xl tracking-tight text-foreground/70 transition-colors duration-300 group-hover:text-foreground sm:text-4xl">
-                {cap.title}
-              </h3>
-              <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:justify-self-end sm:text-base">
-                {cap.line}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+      <div className="capabilities-heading">
+        <span className="eyebrow">
+          FROM THE BIG PICTURE TO THE SMALL DETAILS
+        </span>
+        <h2>Built from the inside out.</h2>
+      </div>
+      <div className="capability-grid">
+        {capabilities.map(({ icon: Icon, title, line, tags }, i) => (
+          <motion.article
+            key={title}
+            className="capability-card"
+            initial={reduced ? false : { opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: reduced ? 0 : 0.7, delay: i * 0.1 }}
+          >
+            <div className="capability-symbol">
+              <Icon size={32} strokeWidth={1} />
+              <span>0{i + 1}</span>
+            </div>
+            <h3>{title}</h3>
+            <p>{line}</p>
+            <div>
+              {tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+              <ArrowUpRight size={18} />
+            </div>
+          </motion.article>
+        ))}
       </div>
     </section>
   );

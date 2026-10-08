@@ -1,6 +1,14 @@
+import { useReducedMotion } from "@/hooks/useMediaQuery";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import {
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -10,17 +18,26 @@ import Magnetic from "./Magnetic";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const info = [
-  { icon: Mail, label: "yddecsasas21@gmail.com", href: "mailto:yddecsasas21@gmail.com" },
+  {
+    icon: Mail,
+    label: "yddecsasas21@gmail.com",
+    href: "mailto:yddecsasas21@gmail.com",
+  },
   { icon: Phone, label: "+63 918-552-5352", href: "tel:+639185525352" },
   { icon: MapPin, label: "Bacolod City, Philippines", href: null },
 ];
 
 const socials = [
   { icon: Github, href: "https://github.com/Ydde21", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/eddy-casas-72a07b364/", label: "LinkedIn" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/eddy-casas-72a07b364/",
+    label: "LinkedIn",
+  },
 ];
 
 export default function ContactSection() {
+  const reduced = useReducedMotion();
   const { toast } = useToast();
   const [sending, setSending] = useState(false);
 
@@ -64,7 +81,8 @@ export default function ContactSection() {
       console.error("Error sending message:", err);
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again or email me directly.",
+        description:
+          "Something went wrong. Please try again or email me directly.",
         variant: "destructive",
       });
     } finally {
@@ -72,36 +90,48 @@ export default function ContactSection() {
     }
   };
 
-
   return (
     <section
       id="contact"
       data-scene="contact"
-      className="relative bg-background px-5 py-32 sm:px-8 sm:py-40"
+      className="contact-section page-shell"
     >
-      <div className="mx-auto max-w-6xl">
-        <motion.h2
-          className="font-display max-w-4xl text-balance text-4xl leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
-          initial={{ opacity: 0, y: 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          Have something{" "}
-          <em className="font-light italic text-accent">worth building</em>?
-        </motion.h2>
+      <div className="mx-auto max-w-[1240px]">
+        <p className="eyebrow">04 / LET’S MAKE SOMETHING GREAT</p>
+        <div className="contact-heading">
+          <motion.h2
+            className="contact-title"
+            initial={reduced ? false : { opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: reduced ? 0 : 0.8, ease: EASE }}
+          >
+            Have an idea?
+            <br />
+            <span>Let’s bring it to life.</span>
+          </motion.h2>
+          <div
+            className="contact-robot"
+            data-robot-anchor
+            data-robot-pose="contact"
+            aria-hidden="true"
+          />
+        </div>
 
         <div className="mt-16 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduced ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.65, delay: 0.1, ease: EASE }}
+            transition={{
+              duration: reduced ? 0 : 0.65,
+              delay: reduced ? 0 : 0.1,
+              ease: EASE,
+            }}
           >
             <p className="max-w-sm text-base leading-relaxed text-muted-foreground">
-              I'm open to full-time roles, freelance builds, and
-              collaborations. The form reaches me directly — I usually reply
-              within a day.
+              I'm open to full-time roles, freelance builds, and collaborations.
+              The form reaches me directly — I usually reply within a day.
             </p>
 
             <ul className="mt-10 space-y-4">
@@ -116,7 +146,9 @@ export default function ContactSection() {
                       {label}
                     </a>
                   ) : (
-                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {label}
+                    </span>
                   )}
                 </li>
               ))}
@@ -141,11 +173,15 @@ export default function ContactSection() {
 
           <motion.form
             onSubmit={handleSubmit}
-            className="space-y-4 border border-border/80 bg-card/85 p-5 backdrop-blur-md sm:p-8"
-            initial={{ opacity: 0, y: 20 }}
+            className="contact-form space-y-6"
+            initial={reduced ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.65, delay: 0.16, ease: EASE }}
+            transition={{
+              duration: reduced ? 0 : 0.65,
+              delay: reduced ? 0 : 0.16,
+              ease: EASE,
+            }}
           >
             <input
               type="text"
@@ -156,7 +192,10 @@ export default function ContactSection() {
               className="sr-only"
             />
             <div>
-              <label htmlFor="contact-name" className="section-index mb-2 block">
+              <label
+                htmlFor="contact-name"
+                className="section-index mb-2 block"
+              >
                 Name
               </label>
               <Input
@@ -165,11 +204,14 @@ export default function ContactSection() {
                 placeholder="Your name"
                 maxLength={120}
                 required
-                className="rounded-sm"
+                className="contact-input"
               />
             </div>
             <div>
-              <label htmlFor="contact-email" className="section-index mb-2 block">
+              <label
+                htmlFor="contact-email"
+                className="section-index mb-2 block"
+              >
                 Email
               </label>
               <Input
@@ -179,11 +221,14 @@ export default function ContactSection() {
                 placeholder="you@company.com"
                 maxLength={254}
                 required
-                className="rounded-sm"
+                className="contact-input"
               />
             </div>
             <div>
-              <label htmlFor="contact-message" className="section-index mb-2 block">
+              <label
+                htmlFor="contact-message"
+                className="section-index mb-2 block"
+              >
                 Message
               </label>
               <Textarea
@@ -193,14 +238,14 @@ export default function ContactSection() {
                 rows={6}
                 maxLength={4000}
                 required
-                className="resize-none rounded-sm"
+                className="resize-none"
               />
             </div>
             <Magnetic strength={0.14} className="block w-full">
               <Button
                 type="submit"
                 disabled={sending}
-                className="btn-sweep w-full rounded-sm font-medium"
+                className="pill-button w-full font-medium"
               >
                 {sending ? "Sending..." : "Send message"}
                 <ArrowUpRight className="ml-2 h-4 w-4" />

@@ -3,7 +3,12 @@ import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -15,8 +20,13 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Instrument Sans", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Fraunces", "serif"],
+        sans: [
+          "Instrument Sans Variable",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
+        display: ["Space Grotesk Variable", "serif"],
         mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
       },
       colors: {

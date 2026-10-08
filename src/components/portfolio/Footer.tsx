@@ -1,54 +1,37 @@
-import { Github, Linkedin, ArrowUp } from "lucide-react";
-
-const socials = [
-  { icon: Github, href: "https://github.com/Ydde21", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/eddy-casas-72a07b364/", label: "LinkedIn" },
-];
-
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 export default function Footer() {
   return (
-    <footer className="relative border-t border-border bg-background px-5 py-12 sm:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
+    <footer className="site-footer page-shell">
+      <div className="footer-name" aria-hidden="true">
+        EDDY CASAS<span>✳</span>
+      </div>
+      <div className="footer-bottom">
+        <p>
+          SOFTWARE DEVELOPER
+          <br />
+          <span>Bacolod City, Philippines</span>
+        </p>
         <div>
-          <p className="font-display text-xl tracking-tight">EDDY CASAS</p>
-          <p className="meta-label mt-2">
-            Software Developer — Bacolod City, PH
-          </p>
-        </div>
-
-        <div className="flex items-center gap-6">
-          {socials.map((s) => {
-            const Icon = s.icon;
-            return (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label={s.label}
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            );
-          })}
           <a
-            href="mailto:yddecsasas21@gmail.com"
-            className="link-underline text-sm text-muted-foreground hover:text-foreground"
+            href="https://github.com/Ydde21"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Email
+            GitHub
+            <ArrowUpRight size={13} />
           </a>
-          <button
-            onClick={scrollToTop}
-            className="link-underline inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          <a
+            href="https://www.linkedin.com/in/eddy-casas-72a07b364/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <ArrowUp className="h-3.5 w-3.5" />
-            Top
-          </button>
+            LinkedIn
+            <ArrowUpRight size={13} />
+          </a>
+          <a href="#home">
+            Back to top
+            <ArrowUp size={13} />
+          </a>
         </div>
       </div>
     </footer>

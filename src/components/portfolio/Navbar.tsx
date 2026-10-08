@@ -1,140 +1,129 @@
-import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { useReducedMotion } from "@/hooks/useMediaQuery";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
-
+import logoMark from "@/assets/logo-3d.png";
 const links = [
   { label: "Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Stack", href: "#stack" },
-  { label: "Contact", href: "#contact" },
+  { label: "Résumé", href: "/CasasEddy.pdf" },
 ];
-
 export default function Navbar() {
   const { isDark, toggle } = useTheme();
+  const reduced = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  /* Reading position: raw scroll progress, spring-smoothed so the hairline
-     glides instead of stepping with each wheel tick. */
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
+  useEffect(() => {
+    if (!open) return;
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    const resize = () => {
+      if (innerWidth >= 768) setOpen(false);
+    };
+    window.addEventListener("keydown", key);
+    window.addEventListener("resize", resize);
+    return () => {
+      window.removeEventListener("keydown", key);
+      window.removeEventListener("resize", resize);
+    };
+  }, [open]);
   return (
-    <motion.header
-      className="fixed inset-x-0 top-0 z-50"
-      initial={{ opacity: 0, y: -12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <nav
-        className="relative transition-all duration-500"
-        style={
-          scrolled || open
-            ? {
-                background: "var(--nav-blur)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
-                borderBottom: "1px solid hsl(var(--border) / 0.7)",
+    <header className={`site-header ${scrolled || open ? "is-scrolled" : ""}`}>
+      <nav className="page-shell nav-inner" aria-label="Primary">
+        <a className="brand" href="#home" aria-label="Eddy Casas home">
+          <img className="brand-mark" src={logoMark} alt="" />
+          <span>
+            EDDY CASAS<span>SOFTWARE DEVELOPER</span>
+          </span>
+        </a>
+        <div className="desktop-nav">
+          {links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={link.href.endsWith(".pdf") ? "nav-resume" : undefined}
+              target={link.href.endsWith(".pdf") ? "_blank" : undefined}
+              rel={
+                link.href.endsWith(".pdf") ? "noopener noreferrer" : undefined
               }
-            : { borderBottom: "1px solid transparent" }
-        }
-        aria-label="Primary"
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <a
-            href="#home"
-            className="font-display text-base font-semibold tracking-tight text-foreground"
-          >
-            EDDY CASAS
-            <span className="meta-label ml-2 hidden !text-[0.625rem] sm:inline">
-              / Software Developer
-            </span>
+            >
+              {link.label}
+            </a>
+          ))}
+          <a href="#contact" className="nav-contact">
+            Let’s talk <ArrowUpRight size={15} />
           </a>
-
-          {/* Desktop links */}
-          <div className="hidden items-center gap-8 md:flex">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="link-underline text-sm text-muted-foreground hover:text-foreground"
-              >
-                {l.label}
-              </a>
-            ))}
-            <button
-              onClick={toggle}
-              className="border border-border p-2 text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-            </button>
-          </div>
-
-          {/* Mobile */}
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggle}
-              className="border border-border p-2 text-muted-foreground hover:text-foreground"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
-            <button
-              onClick={() => setOpen(!open)}
-              className="border border-border p-2 text-muted-foreground hover:text-foreground"
-              aria-label="Toggle menu"
-              aria-expanded={open}
-            >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
-          </div>
         </div>
-
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              className="overflow-hidden md:hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="flex flex-col gap-1 border-t border-border/70 px-5 py-4">
-                {links.map((l) => (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="py-2.5 text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    {l.label}
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Scroll progress — a hairline in the accent, aligned to the nav edge */}
-        <motion.div
-          className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-accent"
-          style={{ scaleX: progress }}
-          aria-hidden="true"
-        />
+        <div className="nav-controls">
+          <button
+            className="icon-control theme-toggle"
+            onClick={toggle}
+            aria-label="Toggle theme"
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <button
+            ref={toggleRef}
+            className="icon-control menu-toggle"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
-    </motion.header>
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            id="mobile-navigation"
+            className="mobile-nav"
+            aria-label="Mobile navigation"
+            initial={reduced ? false : { opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {[...links, { label: "Contact", href: "#contact" }].map(
+              (link, i) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target={link.href.endsWith(".pdf") ? "_blank" : undefined}
+                  rel={
+                    link.href.endsWith(".pdf")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  onClick={() => setOpen(false)}
+                >
+                  <span>0{i + 1}</span>
+                  {link.label}
+                  <ArrowUpRight />
+                </a>
+              ),
+            )}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+      <motion.div
+        className="reading-progress"
+        style={{ scaleX: scrollYProgress }}
+      />
+    </header>
   );
 }
