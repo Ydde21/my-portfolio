@@ -38,8 +38,8 @@ Experience Milestones:
 - 2026: Full Stack Specialist
 
 Tech Stack:
-- Frontend: React, Next.js, TypeScript, Tailwind CSS, HTML5, CSS3, Vite, React Native
-- Backend: Node.js, ASP.NET Core Web API, REST APIs, PHP
+- Frontend: React, Next.js, TypeScript, Tailwind CSS, HTML5, CSS3, Vite, React Native, SwiftUI
+- Backend: Node.js, Go, ASP.NET Core Web API, REST APIs, PHP
 - Database & Cloud: PostgreSQL, Supabase, Vercel, SQL Server, Microsoft Azure
 
 Project Values:
@@ -109,6 +109,8 @@ const SCOPE_TERMS = [
   "typescript",
   "tailwind",
   "node.js",
+  "golang",
+  "swiftui",
   "postgresql",
   "supabase",
   "vercel",

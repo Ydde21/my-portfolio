@@ -11,6 +11,7 @@ const groups = [
       "TypeScript",
       "Tailwind CSS",
       "React Native",
+      "SwiftUI",
       "Vite",
       "HTML5",
       "CSS3",
@@ -19,7 +20,7 @@ const groups = [
   {
     icon: Terminal,
     title: "Backend",
-    items: ["Node.js", "ASP.NET Core Web API", "REST APIs", "PHP"],
+    items: ["Node.js", "Go", "ASP.NET Core Web API", "REST APIs", "PHP"],
   },
   {
     icon: Database,
