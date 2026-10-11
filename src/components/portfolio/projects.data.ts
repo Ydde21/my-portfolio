@@ -47,53 +47,35 @@ import pmResults from "@/assets/projects/paymatrix/paymatrix3.png.png";
 import nmPanelWide from "@/assets/projects/notchmeter/notchmeter1.jpg";
 import nmPanelDetail from "@/assets/projects/notchmeter/notchmeter2.jpg";
 import nmPill from "@/assets/projects/notchmeter/notchmeter3.jpg";
-import nudgeArt from "@/assets/projects/nudge/studio.jpg";
 import nudgeCover from "@/assets/projects/nudge/cover.jpg";
 import nudgeIcon from "@/assets/projects/nudge/icon.png";
 import nudgeIsland from "@/assets/projects/nudge/island.jpg";
 import nudgeLock from "@/assets/projects/nudge/lock.jpg";
 import nudgeReminders from "@/assets/projects/nudge/reminders.jpg";
-import nivraArt from "@/assets/projects/nivra/studio.jpg";
 import nivraCover from "@/assets/projects/nivra/cover.jpg";
 import nivraIcon from "@/assets/projects/nivra/icon.png";
 import nivraScreen from "@/assets/projects/nivra/screen.jpg";
 import nivraPanel from "@/assets/projects/nivra/panel.jpg";
 import nivraEngine from "@/assets/projects/nivra/engine.jpg";
-import recurrArt from "@/assets/projects/recurr/studio.jpg";
 import recurrCover from "@/assets/projects/recurr/cover.jpg";
 import recurrTimeline from "@/assets/projects/recurr/timeline.jpg";
 import recurrFlow from "@/assets/projects/recurr/flow.jpg";
 import recurrDiff from "@/assets/projects/recurr/diff.jpg";
 
-import notchmeterStudio from "@/assets/projects/notchmeter/studio-v1.jpg";
 import notchmeterCover from "@/assets/projects/notchmeter/cover-v1.jpg";
-import savewiseStudio from "@/assets/projects/savewise/studio-v1.jpg";
 import savewiseCover from "@/assets/projects/savewise/cover-v1.jpg";
-import havenharmonyStudio from "@/assets/projects/havenharmony/studio-v1.jpg";
 import havenharmonyCover from "@/assets/projects/havenharmony/cover-v1.jpg";
-import paylanceStudio from "@/assets/projects/paylance/studio-v1.jpg";
 import paylanceCover from "@/assets/projects/paylance/cover-v1.jpg";
-import procuredeskStudio from "@/assets/projects/procuredesk/studio-v1.jpg";
 import procuredeskCover from "@/assets/projects/procuredesk/cover-v1.jpg";
-import cliniqoStudio from "@/assets/projects/cliniqo/studio-v1.jpg";
 import cliniqoCover from "@/assets/projects/cliniqo/cover-v1.jpg";
-import timepayStudio from "@/assets/projects/timepay/studio-v1.jpg";
 import timepayCover from "@/assets/projects/timepay/cover-v1.jpg";
-import paymatrixStudio from "@/assets/projects/paymatrix/studio-v1.jpg";
 import paymatrixCover from "@/assets/projects/paymatrix/cover-v1.jpg";
-import sulitflightStudio from "@/assets/projects/sulitflight/studio-v1.jpg";
 import sulitflightCover from "@/assets/projects/sulitflight/cover-v1.jpg";
-import mineflowStudio from "@/assets/projects/mineflow/studio-v1.jpg";
 import mineflowCover from "@/assets/projects/mineflow/cover-v1.jpg";
-import adforgeStudio from "@/assets/projects/adforge/studio-v1.jpg";
 import adforgeCover from "@/assets/projects/adforge/cover-v1.jpg";
-import servicepassStudio from "@/assets/projects/servicepass/studio-v1.jpg";
 import servicepassCover from "@/assets/projects/servicepass/cover-v1.jpg";
-import presyoproStudio from "@/assets/projects/presyopro/studio-v1.jpg";
 import presyoproCover from "@/assets/projects/presyopro/cover-v1.jpg";
-import savvywalletStudio from "@/assets/projects/savvywallet/studio-v1.jpg";
 import savvywalletCover from "@/assets/projects/savvywallet/cover-v1.jpg";
-import aniverseStudio from "@/assets/projects/aniverse/studio-v1.jpg";
 import aniverseCover from "@/assets/projects/aniverse/cover-v1.jpg";
 
 export type ProjectKind = "web" | "mobile";
@@ -118,7 +100,6 @@ interface BaseProject {
     identity: string;
     composition?: "notch" | "mobile" | "editorial" | "invoice" | "workflow" | "dashboard" | "stack" | "campaign" | "calculator" | "gallery";
     tone: string;
-    art: string;
     icon?: string;
     cover?: string;
     edition: string;
@@ -183,7 +164,7 @@ export const projects: PortfolioProject[] = [
       { src: nudgeLock, alt: "Nudge Lock Screen product preview with a reminder Live Activity and compact Dynamic Island" },
       { src: nudgeReminders, alt: "Nudge product preview of the reminder list with a due reminder, scheduled tasks, recurring reminders, and an Add Reminder action" },
     ],
-    showcase: { identity: "nudge", tone: "#ffab66", art: nudgeArt, cover: nudgeCover, icon: nudgeIcon, edition: "iOS / LIVE ACTIVITIES", headline: "A little nudge.\nRight on time.", footer: "LOCAL FIRST · ALWAYS IN VIEW" },
+    showcase: { identity: "nudge", tone: "#ffab66", cover: nudgeCover, icon: nudgeIcon, edition: "iOS / LIVE ACTIVITIES", headline: "A little nudge.\nRight on time.", footer: "LOCAL FIRST · ALWAYS IN VIEW" },
     caseStudy: {
       challenge: "A reminder should reach you where you already are, without making you open another app to act on it.",
       approach: "The Dynamic Island is the primary interface. One Live Activity represents the queue, while Done and snooze actions work from the expanded island and Lock Screen. The app handles creating and managing reminders; SwiftData and local notifications keep the experience on-device.",
@@ -205,7 +186,7 @@ export const projects: PortfolioProject[] = [
     ],
     liveUrl: "https://nivra-dev.vercel.app",
     repoUrl: "https://github.com/Ydde21/Nivra",
-    showcase: { identity: "nivra", tone: "#b6b1ff", art: nivraArt, cover: nivraCover, icon: nivraIcon, edition: "macOS / ON-DEVICE TRIAGE", headline: "Less noise.\nOne clear signal.", footer: "ONE THING AT A TIME" },
+    showcase: { identity: "nivra", tone: "#b6b1ff", cover: nivraCover, icon: nivraIcon, edition: "macOS / ON-DEVICE TRIAGE", headline: "Less noise.\nOne clear signal.", footer: "ONE THING AT A TIME" },
     caseStudy: {
       challenge: "Meetings, agent decisions, and failing builds compete for attention. A useful signal needs a clear priority, not another stream of notifications.",
       approach: "Nivra scores each candidate using source weight, urgency, and staleness decay, then deduplicates the queue. Only the winner occupies the notch. A nonactivating macOS panel reveals the remaining items on hover while keeping the current app in focus.",
@@ -226,7 +207,7 @@ export const projects: PortfolioProject[] = [
     ],
     liveUrl: "https://recurr-dev.vercel.app",
     repoUrl: "https://github.com/Ydde21/recurr",
-    showcase: { identity: "recurr", tone: "#99e8c3", art: recurrArt, cover: recurrCover, edition: "OPEN SOURCE / NODE.JS", headline: "The bug happened.\nRun it back.", footer: "CAPTURE → REPLAY → DIFF → VERIFY" },
+    showcase: { identity: "recurr", tone: "#99e8c3", cover: recurrCover, edition: "OPEN SOURCE / NODE.JS", headline: "The bug happened.\nRun it back.", footer: "CAPTURE → REPLAY → DIFF → VERIFY" },
     caseStudy: {
       challenge: "A production failure is a sequence of events. Reconstructing that sequence from the final error alone makes local reproduction difficult.",
       approach: "The capture SDK records dependencies and deterministic inputs, redacting secrets before persistence. Replay serves recorded responses inside an isolated process. The developer workspace exposes timelines, flow graphs, and diffs; saved scenarios check whether a fixed build changes the outcome.",
@@ -235,7 +216,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "NotchMeter",
-    showcase: { identity: "notchmeter", art: notchmeterStudio, cover: notchmeterCover, tone: "#8fdcff", composition: "notch", edition: "macOS / AI USAGE", headline: "Your AI usage.\nAlways in sight.", footer: "CLAUDE · CHATGPT · CURSOR", primary: 0, secondary: 1, detail: "AI usage, at a glance" },
+    showcase: { identity: "notchmeter", cover: notchmeterCover, tone: "#8fdcff", composition: "notch", edition: "macOS / AI USAGE", headline: "Your AI usage.\nAlways in sight.", footer: "CLAUDE · CHATGPT · CURSOR", primary: 0, secondary: 1, detail: "AI usage, at a glance" },
     category: "Desktop",
     description:
       "A Dynamic-Island-style overlay that lives in the MacBook notch and shows how much of each AI subscription has been burned — Claude, ChatGPT, and Cursor usage at a glance, with per-window usage bars, reset countdowns, plan badges, and credit balances.",
@@ -265,7 +246,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "SaveWise",
-    showcase: { identity: "savewise", art: savewiseStudio, cover: savewiseCover, tone: "#9ce4b3", composition: "mobile", edition: "iOS + ANDROID / PERSONAL FINANCE", headline: "Money, made\nclear.", footer: "INCOME · EXPENSES · SAVINGS", primary: 0, secondary: 1, detail: "A clearer view of your money" },
+    showcase: { identity: "savewise", cover: savewiseCover, tone: "#9ce4b3", composition: "mobile", edition: "iOS + ANDROID / PERSONAL FINANCE", headline: "Money, made\nclear.", footer: "INCOME · EXPENSES · SAVINGS", primary: 0, secondary: 1, detail: "A clearer view of your money" },
     description:
       "A financial tracker app that helps users monitor income, expenses, savings, and loans with clear dashboards and actionable insights.",
     kind: "mobile",
@@ -293,7 +274,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Haven Harmony",
-    showcase: { identity: "havenharmony", art: havenharmonyStudio, cover: havenharmonyCover, tone: "#e9c79c", composition: "editorial", edition: "WEB / HOSPITALITY", headline: "Every stay.\nBeautifully managed.", footer: "BOOKING · ROOMS · GUEST SERVICES", primary: 0, secondary: 2, detail: "Rooms, ready to explore" },
+    showcase: { identity: "havenharmony", cover: havenharmonyCover, tone: "#e9c79c", composition: "editorial", edition: "WEB / HOSPITALITY", headline: "Every stay.\nBeautifully managed.", footer: "BOOKING · ROOMS · GUEST SERVICES", primary: 0, secondary: 2, detail: "Rooms, ready to explore" },
     description:
       "A comprehensive hotel management system with booking, room management, and guest services features. Built for seamless hospitality operations.",
     kind: "web",
@@ -312,7 +293,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Paylance",
-    showcase: { identity: "paylance", art: paylanceStudio, cover: paylanceCover, tone: "#8eaaff", composition: "invoice", edition: "WEB / BILLING & INVENTORY", headline: "Billing, beautifully\nunder control.", footer: "INVOICES · INVENTORY · PDF EXPORT", primary: 1, secondary: 0, detail: "From inventory to invoice" },
+    showcase: { identity: "paylance", cover: paylanceCover, tone: "#8eaaff", composition: "invoice", edition: "WEB / BILLING & INVENTORY", headline: "Billing, beautifully\nunder control.", footer: "INVOICES · INVENTORY · PDF EXPORT", primary: 1, secondary: 0, detail: "From inventory to invoice" },
     description:
       "An all-in-one invoicing and business operations platform with client billing, inventory tracking, and PDF invoice workflows.",
     kind: "web",
@@ -337,7 +318,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "ProcureDesk",
-    showcase: { identity: "procuredesk", art: procuredeskStudio, cover: procuredeskCover, tone: "#a9c8ed", composition: "workflow", edition: "WEB / PROCUREMENT", headline: "Every request.\nA clear path.", footer: "REQUEST · APPROVE · TRACK", primary: 0, secondary: 2, detail: "Purchase requests & approvals" },
+    showcase: { identity: "procuredesk", cover: procuredeskCover, tone: "#a9c8ed", composition: "workflow", edition: "WEB / PROCUREMENT", headline: "Every request.\nA clear path.", footer: "REQUEST · APPROVE · TRACK", primary: 0, secondary: 2, detail: "Purchase requests & approvals" },
     description:
       "A full-cycle Purchase Request and Budget Control System that streamlines procurement from draft to delivery through role-based approvals, budget reservation/release, PO creation, and immutable audit logs.",
     kind: "web",
@@ -356,7 +337,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Cliniqo",
-    showcase: { identity: "cliniqo", art: cliniqoStudio, cover: cliniqoCover, tone: "#87ddcb", composition: "dashboard", edition: "WEB / CLINIC OPERATIONS", headline: "Care starts\nwith clarity.", footer: "APPOINTMENTS · QUEUES · CONSULTATIONS", primary: 0, secondary: 1, detail: "Appointments, in perspective" },
+    showcase: { identity: "cliniqo", cover: cliniqoCover, tone: "#87ddcb", composition: "dashboard", edition: "WEB / CLINIC OPERATIONS", headline: "Care starts\nwith clarity.", footer: "APPOINTMENTS · QUEUES · CONSULTATIONS", primary: 0, secondary: 1, detail: "Appointments, in perspective" },
     description:
       "A full-stack Clinic Booking and Queue Management System that streamlines patient registration, appointment scheduling, walk-in handling, check-in, and real-time queue monitoring. It includes secure role-based access (Admin, Receptionist, Doctor, Patient), doctor consultation workflows, automated appointment reminders, analytics reports, and audit logs to improve clinic operations and reduce patient wait times.",
     kind: "web",
@@ -378,7 +359,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "TimePay PH",
-    showcase: { identity: "timepay", art: timepayStudio, cover: timepayCover, tone: "#ffbc8a", composition: "workflow", edition: "WEB / TIME & PAYROLL", headline: "From clock-in\nto payday.", footer: "GEOFENCED ATTENDANCE · PAYROLL", primary: 0, secondary: 1, detail: "Attendance meets payroll" },
+    showcase: { identity: "timepay", cover: timepayCover, tone: "#ffbc8a", composition: "workflow", edition: "WEB / TIME & PAYROLL", headline: "From clock-in\nto payday.", footer: "GEOFENCED ATTENDANCE · PAYROLL", primary: 0, secondary: 1, detail: "Attendance meets payroll" },
     description:
       "A mobile-first SaaS attendance and payroll platform built for Philippine businesses, designed to unify workforce operations in one secure system. It combines role-based employee management, geofenced clock-in/out, and attendance analytics with a phased path to fully compliant payroll processing, government contributions, tax calculations, payslips, and audit-ready controls.",
     kind: "web",
@@ -400,7 +381,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "PayMatrix",
-    showcase: { identity: "paymatrix", art: paymatrixStudio, cover: paymatrixCover, tone: "#b9abff", composition: "stack", edition: "WEB / PAYROLL", headline: "Attendance in.\nPayroll out.", footer: "BIOMETRICS CSV · CONTRIBUTIONS · TAX", primary: 0, secondary: 2, detail: "Import. Process. Review." },
+    showcase: { identity: "paymatrix", cover: paymatrixCover, tone: "#b9abff", composition: "stack", edition: "WEB / PAYROLL", headline: "Attendance in.\nPayroll out.", footer: "BIOMETRICS CSV · CONTRIBUTIONS · TAX", primary: 0, secondary: 2, detail: "Import. Process. Review." },
     description:
       "PayMatrix is a modern Philippine payroll system focused on accurate, compliance-ready payroll processing with biometric attendance import. It supports fingerprint log uploads (including ZKTeco and generic CSV), intelligent column mapping and punch pairing, then computes end-to-end payroll with SSS, PhilHealth, Pag-IBIG, TRAIN withholding tax, overtime/holiday pay, allowances, deductions, and exportable payroll results in a clean, role-ready web interface.",
     kind: "web",
@@ -422,7 +403,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "SulitFlights",
-    showcase: { identity: "sulitflight", art: sulitflightStudio, cover: sulitflightCover, tone: "#9ed9ed", composition: "editorial", edition: "WEB / FLIGHT SEARCH", headline: "Find your flight.\nKeep your budget.", footer: "SEARCH · COMPARE · EXPLORE", primary: 0, secondary: 1, detail: "Popular routes, easy to compare" },
+    showcase: { identity: "sulitflight", cover: sulitflightCover, tone: "#9ed9ed", composition: "editorial", edition: "WEB / FLIGHT SEARCH", headline: "Find your flight.\nKeep your budget.", footer: "SEARCH · COMPARE · EXPLORE", primary: 0, secondary: 1, detail: "Popular routes, easy to compare" },
     description:
       "A flight search web app focused on helping users find the cheapest available flight options quickly.",
     kind: "web",
@@ -440,7 +421,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Mine Flow",
-    showcase: { identity: "mineflow", art: mineflowStudio, cover: mineflowCover, tone: "#66e0d7", composition: "dashboard", edition: "WEB / SOCIAL COMMERCE", headline: "A comment.\nA conversation.", footer: "KEYWORD REPLIES · DIRECT MESSAGES", primary: 1, secondary: 2, detail: "Your automation workspace" },
+    showcase: { identity: "mineflow", cover: mineflowCover, tone: "#66e0d7", composition: "dashboard", edition: "WEB / SOCIAL COMMERCE", headline: "A comment.\nA conversation.", footer: "KEYWORD REPLIES · DIRECT MESSAGES", primary: 1, secondary: 2, detail: "Your automation workspace" },
     description:
       "An auto-reply system for Facebook live sellers that detects comment keywords, sends automated Messenger DMs, and continues the transaction flow until completion.",
     kind: "web",
@@ -459,7 +440,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "AdForge",
-    showcase: { identity: "adforge", art: adforgeStudio, cover: adforgeCover, tone: "#ffa073", composition: "campaign", edition: "WEB / AD CREATIVE", headline: "Ideas into\ncampaigns.", footer: "CREATIVES · CAMPAIGNS · INSIGHTS", primary: 0, secondary: 2, detail: "A workspace for your next creative" },
+    showcase: { identity: "adforge", cover: adforgeCover, tone: "#ffa073", composition: "campaign", edition: "WEB / AD CREATIVE", headline: "Ideas into\ncampaigns.", footer: "CREATIVES · CAMPAIGNS · INSIGHTS", primary: 0, secondary: 2, detail: "A workspace for your next creative" },
     description:
       "An ad campaign management web app for building creatives, launching campaigns, and monitoring performance insights.",
     kind: "web",
@@ -478,7 +459,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "ServicePass PH",
-    showcase: { identity: "servicepass", art: servicepassStudio, cover: servicepassCover, tone: "#f2ce8c", composition: "stack", edition: "WEB / EXAM PREPARATION", headline: "Study with purpose.\nPractice with focus.", footer: "STUDY GUIDES · MOCK EXAMS", primary: 0, secondary: 1, detail: "Study guides & focused practice" },
+    showcase: { identity: "servicepass", cover: servicepassCover, tone: "#f2ce8c", composition: "stack", edition: "WEB / EXAM PREPARATION", headline: "Study with purpose.\nPractice with focus.", footer: "STUDY GUIDES · MOCK EXAMS", primary: 0, secondary: 1, detail: "Study guides & focused practice" },
     description:
       "A Civil Service Exam simulator with Study Mode and a timed Mock Exam experience modeled after the real CSE flow. Includes PayMongo payment gateway integration in test mode while business verification is pending.",
     kind: "web",
@@ -500,7 +481,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Presyo Pro Calculator",
-    showcase: { identity: "presyopro", art: presyoproStudio, cover: presyoproCover, tone: "#ebd48c", composition: "calculator", edition: "WEB / PRICING", headline: "Price with clarity.\nKnow your margin.", footer: "COSTS · FEES · PROFIT MARGINS", primary: 0, secondary: 1, detail: "Explore your pricing options" },
+    showcase: { identity: "presyopro", cover: presyoproCover, tone: "#ebd48c", composition: "calculator", edition: "WEB / PRICING", headline: "Price with clarity.\nKnow your margin.", footer: "COSTS · FEES · PROFIT MARGINS", primary: 0, secondary: 1, detail: "Explore your pricing options" },
     description:
       "A pricing and profit-margin calculator for online sellers that estimates the right selling price based on costs, fees, and target profit so they can stay competitive without losing money.",
     kind: "web",
@@ -518,7 +499,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Savvy Wallet",
-    showcase: { identity: "savvywallet", art: savvywalletStudio, cover: savvywalletCover, tone: "#99d6bf", composition: "dashboard", edition: "WEB / PERSONAL FINANCE", headline: "Your money.\nA clearer picture.", footer: "BUDGETS · SPENDING · GOALS", primary: 0, secondary: 2, detail: "See where your money goes" },
+    showcase: { identity: "savvywallet", cover: savvywalletCover, tone: "#99d6bf", composition: "dashboard", edition: "WEB / PERSONAL FINANCE", headline: "Your money.\nA clearer picture.", footer: "BUDGETS · SPENDING · GOALS", primary: 0, secondary: 2, detail: "See where your money goes" },
     description:
       "A smart finance and expense tracker that helps users manage budgets, track spending, and visualize financial goals with intuitive charts.",
     kind: "web",
@@ -536,7 +517,7 @@ export const projects: PortfolioProject[] = [
   },
   {
     title: "Aniverse Canvas",
-    showcase: { identity: "aniverse", art: aniverseStudio, cover: aniverseCover, tone: "#d0a3ff", composition: "gallery", edition: "WEB / ANIME & ART", headline: "A canvas for\nyour imagination.", footer: "DISCOVER · COLLECT · EXPLORE", primary: 0, secondary: 2, detail: "A world of art to discover" },
+    showcase: { identity: "aniverse", cover: aniverseCover, tone: "#d0a3ff", composition: "gallery", edition: "WEB / ANIME & ART", headline: "A canvas for\nyour imagination.", footer: "DISCOVER · COLLECT · EXPLORE", primary: 0, secondary: 2, detail: "A world of art to discover" },
     description:
       "An anime art platform where artists can showcase, share, and discover artwork. Features galleries, community interactions, and curated collections.",
     kind: "web",

@@ -61,7 +61,7 @@ function CollectionComposition({ project }: { project: PortfolioProject }) {
   );
 }
 
-/** Product interfaces come from the apps' own local demos. The art is a backdrop. */
+/** Product interfaces come from the apps' own local demos over a CSS studio backdrop. */
 export default function ProductShowcase({ project, open }: {
   project: PortfolioProject;
   open?: () => void;
@@ -98,7 +98,7 @@ export default function ProductShowcase({ project, open }: {
       role={open ? undefined : "img"}
       aria-label={open ? undefined : `${project.title} product showcase: ${showcase.headline.replace(/\n/g, " ")}`}
     >
-      <img className="studio-art" src={showcase.art} alt="" loading="lazy" />
+      <span className="studio-backdrop" />
       <div className="studio-vignette" />
       <div className="studio-content" aria-hidden="true">
         <div className="studio-topline">
