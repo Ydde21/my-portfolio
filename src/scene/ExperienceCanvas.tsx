@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { createRobotDirector } from "./director";
 import { createRobotPresentation } from "./presentation";
 import { buildRobot, type RobotPose } from "./robot";
 import { detectQuality, pixelRatioSteps } from "./quality";
@@ -7,6 +8,7 @@ import { detectQuality, pixelRatioSteps } from "./quality";
 /** One transparent canvas, aligned to reserved HTML spaces. Each [data-robot-anchor]
  * reserves real layout space; data-robot-pose selects the character's gesture.
  * Scroll changes its position and turn, never the page's scrolling behavior.
+ * `director.ts` owns the choreography; this component only measures the page.
  * Offscreen / hidden tabs stop rendering. Reduced motion gets static frames.
  * The hero's image remains visible until WebGL has successfully rendered.
  */
@@ -48,8 +50,8 @@ export default function ExperienceCanvas() {
 
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduced = media.matches;
+    const director = createRobotDirector(robot);
     let raf = 0,
-      time = 0,
       lastTime = 0,
       frames = 0,
       slowFrames = 0;
@@ -58,34 +60,15 @@ export default function ExperienceCanvas() {
       contextLost = false,
       hasRendered = false;
     let active: HTMLElement | null = null;
-    let pose: RobotPose = "hero";
-    let targetScale = 1,
-      targetTurn = 0,
-      entrance = 1,
-      chapterProgress = 0.5;
     let viewportWidth = 1,
       viewportHeight = 1;
-    const target = new THREE.Vector3();
     const pointer = new THREE.Vector2();
-    let dragAngle = 0,
-      spinStart = -10,
-      spinBase = 0,
-      flight = 0;
-    let heroProgress = 0;
     const rotate = (event: Event) => {
-      spinStart = -10;
-      dragAngle += (event as CustomEvent<number>).detail;
+      director.rotate((event as CustomEvent<number>).detail);
       requestFrame();
     };
     const spin = () => {
-      if (reduced) {
-        dragAngle += Math.PI / 2;
-        requestFrame();
-        return;
-      }
-      if (time - spinStart < 2.6) return;
-      spinBase = dragAngle;
-      spinStart = time;
+      director.spin(reduced);
       requestFrame();
     };
     window.addEventListener("robot-rotate", rotate);
@@ -121,20 +104,9 @@ export default function ExperienceCanvas() {
         active = null;
         return;
       }
-      const r = bestRect;
-      const viewWidth = (8 * viewportWidth) / viewportHeight;
-      target.set(
-        ((r.left + r.width / 2) / viewportWidth - 0.5) * viewWidth,
-        (0.5 - (r.top + r.height / 2) / viewportHeight) * 8,
-        0,
-      );
-      targetScale = Math.min(
-        ((r.height / viewportHeight) * 8) / 6.6,
-        ((r.width / viewportWidth) * viewWidth) / 4.6,
-      );
-      pose = (best.dataset.robotPose || "quiet") as RobotPose;
+      const pose = (best.dataset.robotPose || "quiet") as RobotPose;
       const home = document.getElementById("home")?.getBoundingClientRect();
-      heroProgress =
+      const heroProgress =
         home &&
         viewportWidth >= 960 &&
         viewportHeight >= 650 &&
@@ -145,22 +117,12 @@ export default function ExperienceCanvas() {
               1,
             )
           : 0;
-      chapterProgress = 0.5;
-      flight = 0;
-      if (pose === "hero") {
-        flight = reduced ? 0 : Math.sin(heroProgress * Math.PI);
-        const travel = reduced
-          ? 0
-          : THREE.MathUtils.smoothstep(heroProgress, 0.3, 0.88);
-        target.x -= travel * viewWidth * 0.12;
-        target.y += reduced ? 0 : Math.sin(heroProgress * Math.PI) * 0.8;
-        targetScale *=
-          1 + (reduced ? 0 : Math.sin(heroProgress * Math.PI) * 0.14);
-        targetTurn = reduced ? -0.18 : -0.32 + heroProgress * Math.PI * 2;
-      } else if (pose === "present") {
+      let workProgress = 0;
+      let chapters = 1;
+      if (pose === "present") {
         const work = document.getElementById("work");
         const wr = work?.getBoundingClientRect();
-        const progress =
+        workProgress =
           wr && wr.height > viewportHeight + 10
             ? THREE.MathUtils.clamp(
                 -wr.top / (wr.height - viewportHeight),
@@ -168,21 +130,23 @@ export default function ExperienceCanvas() {
                 1,
               )
             : 0;
-        chapterProgress = reduced ? 0.5 : (progress * 4) % 1;
+        chapters = 4;
         mount!.dataset.project = work?.dataset.activeProject || "0";
-        targetTurn = 0.25 + Math.sin(chapterProgress * Math.PI) * 0.4;
-        flight = reduced
-          ? 0
-          : Math.pow(Math.sin(chapterProgress * Math.PI), 4) * 0.35;
-      } else targetTurn = pose === "quiet" ? -0.25 : 0.18;
-      if (best !== active) {
-        active = best;
-        entrance = reduced || !hasRendered ? 1 : 0;
-        robot.root.position.copy(target);
-        robot.root.scale.setScalar(targetScale);
-        robot.root.rotation.y = targetTurn + (pose === "hero" ? dragAngle : 0);
-        robot.root.rotation.z = reduced || pose !== "hero" ? 0 : -0.08;
       }
+      const changed = best !== active;
+      active = best;
+      director.setAnchor(
+        {
+          pose,
+          rect: bestRect,
+          viewport: { width: viewportWidth, height: viewportHeight },
+          heroProgress,
+          workProgress,
+          chapters,
+        },
+        changed,
+        !reduced && hasRendered,
+      );
       mount!.dataset.pose = pose;
     }
 
@@ -196,51 +160,10 @@ export default function ExperienceCanvas() {
         lastTime = 0;
         return;
       }
-      time += reduced ? 0 : delta;
-      const distance = robot.root.position.distanceTo(target);
-      robot.root.position.copy(target);
-      robot.root.scale.setScalar(targetScale);
-      const spinProgress = reduced
-        ? 0
-        : THREE.MathUtils.clamp((time - spinStart) / 2.6, 0, 1);
-      const spinEnergy =
-        spinProgress > 0 && spinProgress < 1
-          ? Math.sin(spinProgress * Math.PI)
-          : 0;
-      if (spinEnergy > 0)
-        dragAngle =
-          spinBase +
-          spinProgress * spinProgress * (3 - 2 * spinProgress) * Math.PI * 2;
-      const rotation = targetTurn + (pose === "hero" ? dragAngle : 0);
-      robot.root.rotation.y = reduced
-        ? rotation
-        : THREE.MathUtils.damp(robot.root.rotation.y, rotation, 7, delta);
-      robot.root.rotation.z = reduced
-        ? 0
-        : THREE.MathUtils.damp(
-            robot.root.rotation.z,
-            pose === "hero"
-              ? -0.08 - flight * 0.22 + spinEnergy * 0.3
-              : Math.sin(time * 0.6) * 0.03,
-            7,
-            delta,
-          );
-      robot.root.position.y += spinEnergy * 0.45;
-      robot.update({
-        time,
-        delta,
-        pose,
-        pointer,
-        walking: Math.min(1, distance * 6),
-        reduced,
-        progress: reduced ? 0.5 : chapterProgress,
-        flight,
-        celebration: spinEnergy,
-      });
+      const frame = director.step(delta, pointer, reduced);
       mount!.dataset.motion = reduced ? "static" : "animated";
-      mount!.dataset.rotation = robot.root.rotation.y.toFixed(2);
-      entrance = reduced ? 1 : Math.min(1, entrance + delta * 4);
-      mount!.style.opacity = String(entrance);
+      mount!.dataset.rotation = frame.rotation.toFixed(2);
+      mount!.style.opacity = String(frame.opacity);
       renderer.render(scene, camera);
       hasRendered = true;
       if (document.documentElement.dataset.robotReady !== "true") {

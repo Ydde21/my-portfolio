@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { MarchingCubes } from "three/examples/jsm/objects/MarchingCubes.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { Spring, drift, random, smooth } from "./springs";
 
 export type RobotPose = "hero" | "present" | "quiet" | "contact";
 export interface RobotMotion {
@@ -8,8 +9,12 @@ export interface RobotMotion {
   delta: number;
   pose: RobotPose;
   pointer: THREE.Vector2;
+  /** Travel speed, 0-1. The legs trail and the body leans; nothing walks. */
   walking: number;
+  /** Progress through the current featured chapter, 0-1. */
   progress?: number;
+  /** Featured chapter index. A new chapter restarts the presenting gesture. */
+  chapter?: number;
   flight?: number;
   celebration?: number;
   reduced: boolean;
@@ -432,11 +437,57 @@ export function buildRobot() {
   );
   shadow.rotation.x = -0.4;
 
+  // Motion system: each joint is a spring with its own weight, so the head
+  // leads, the torso follows, and arms and legs settle a beat later.
+  const S = (value: number, frequency: number, damping = 1) =>
+    new Spring(value, frequency, damping);
+  const springs = {
+    headYaw: S(0, 1.1, 0.9),
+    headPitch: S(0, 1.1, 0.9),
+    headRoll: S(0, 0.8),
+    eyeX: S(0.08, 3.6, 0.8),
+    eyeY: S(0.1, 3.6, 0.8),
+    torsoYaw: S(0, 0.6),
+    torsoRoll: S(0, 0.6),
+    bodyPitch: S(0, 0.9),
+    leftShoulderZ: S(0.34, 1.25, 0.72),
+    leftShoulderX: S(-0.22, 1.1, 0.9),
+    leftElbowZ: S(0.12, 1.6, 0.68),
+    leftElbowX: S(-0.35, 1.3, 0.9),
+    leftWristZ: S(0, 2.3, 0.6),
+    leftHandY: S(0, 1.4),
+    rightShoulderZ: S(-0.3, 1.25, 0.72),
+    rightShoulderX: S(-0.2, 1.1, 0.9),
+    rightElbowX: S(-0.4, 1.3, 0.9),
+    leftHipX: S(0.16, 1, 0.8),
+    rightHipX: S(-0.16, 1, 0.8),
+    leftKneeX: S(-0.25, 1.15, 0.75),
+    rightKneeX: S(-0.16, 1.15, 0.75),
+    present: S(0, 0.85, 0.62),
+    glow: S(0, 1),
+  };
+  type Joint = keyof typeof springs;
+  const next = random(7);
   let lastPose: RobotPose = "hero";
   let poseTime = 0;
   let greetingFinished = false;
-  const damp = (current: number, target: number, dt: number) =>
-    THREE.MathUtils.damp(current, target, 9, dt);
+  let nextBlink = 2.2;
+  let blinkStart = -10;
+  let doubleBlink = false;
+  let nextGlance = 3.4;
+  let pointerIdle = 10;
+  let lastChapter = -1;
+  let chapterTime = 10;
+  const glance = new THREE.Vector2();
+  const lastPointer = new THREE.Vector2();
+  const gaze = new THREE.Vector2();
+  // Eyelids close quickly and open slowly, like a real blink.
+  const lid = (elapsed: number) =>
+    elapsed < 0 || elapsed > 0.24
+      ? 1
+      : elapsed < 0.07
+        ? 1 - smooth(0, 0.07, elapsed) * 0.92
+        : 0.08 + smooth(0.07, 0.24, elapsed) * 0.92;
 
   return {
     root,
@@ -462,6 +513,7 @@ export function buildRobot() {
       walking,
       reduced,
       progress = 0.5,
+      chapter = 0,
       flight = 0,
       celebration = 0,
     }: RobotMotion) {
@@ -471,113 +523,177 @@ export function buildRobot() {
       }
       poseTime += delta;
       const t = reduced ? 0 : time;
-      const dt = reduced ? 1 : delta;
-      const greet = !reduced && pose === "hero" && !greetingFinished;
-      const wave = greet ? Math.sin(Math.PI * Math.min(1, poseTime / 3.5)) : 0;
-      if (greet && poseTime > 3.5) greetingFinished = true;
-      const flying = reduced ? 0 : Math.max(flight, celebration);
-      const present =
+      const drive = (joint: Joint, target: number) =>
+        reduced
+          ? springs[joint].snap(target)
+          : springs[joint].step(target, delta);
+
+      // Gaze: follow the visitor's pointer; when it rests, glance around
+      // naturally and come back. Larger glances bring a blink with them.
+      if (!reduced) {
+        if (pointer.distanceToSquared(lastPointer) > 1e-6) {
+          pointerIdle = 0;
+          lastPointer.copy(pointer);
+        } else pointerIdle += delta;
+        if (t >= nextGlance) {
+          const previous = glance.clone();
+          if (next() < 0.5) glance.set(0, 0);
+          else glance.set((next() - 0.5) * 1.3, (next() - 0.6) * 0.6);
+          nextGlance = t + 2.2 + next() * 3.2;
+          if (previous.distanceTo(glance) > 0.45 && t - blinkStart > 1)
+            blinkStart = t;
+        }
+        if (t >= nextBlink) {
+          blinkStart = t;
+          doubleBlink = next() < 0.18;
+          nextBlink = t + 2.4 + next() * 3.4;
+        }
+      }
+      if (pose === "present") {
+        if (chapter !== lastChapter) {
+          lastChapter = chapter;
+          chapterTime = 0;
+        }
+        chapterTime += delta;
+      } else lastChapter = -1;
+      if (reduced) gaze.set(0, 0);
+      else if (pointerIdle < 2.5) gaze.copy(pointer);
+      else gaze.copy(glance);
+
+      // A single, relaxed greeting: a small anticipation dip, an easy raise,
+      // two unhurried waves with the wrist trailing, then the arm settles.
+      const greeting =
+        !reduced && pose === "hero" && !greetingFinished ? poseTime - 0.6 : -1;
+      if (greeting > 3.2) greetingFinished = true;
+      const greetOn = greeting >= -0.35 && !greetingFinished;
+      const anticipation = greetOn
+        ? smooth(-0.35, 0, greeting) * (1 - smooth(0, 0.3, greeting))
+        : 0;
+      const raise = greetOn
+        ? smooth(0, 0.55, greeting) * (1 - smooth(2.3, 2.95, greeting))
+        : 0;
+      const waving = greetOn
+        ? smooth(0.5, 0.85, greeting) * (1 - smooth(1.9, 2.4, greeting))
+        : 0;
+      const wavePhase = (greeting - 0.5) * Math.PI * 2 * 1.5;
+
+      // Presenting: the open hand rises when a chapter settles, lowers
+      // between chapters, and overshoots slightly like a real gesture.
+      const edge = Math.min(
+        smooth(0.03, 0.15, progress),
+        1 - smooth(0.85, 0.97, progress),
+      );
+      const presentTarget =
         pose === "present"
-          ? 0.8 + Math.sin(progress * Math.PI) * 0.55
+          ? (reduced ? 1 : smooth(0.15, 0.5, chapterTime)) * edge
           : pose === "contact"
-            ? 0.65
+            ? 0.55
             : 0;
-      const hover = reduced ? 0 : Math.sin(t * 1.6);
-      const stride = Math.sin(t * 8) * Math.min(1, walking);
-      body.position.y = -0.66 + hover * 0.13 + flying * 0.16;
-      body.rotation.x = damp(body.rotation.x, -flying * 0.22, dt);
-      torso.rotation.z = reduced ? 0 : Math.sin(t * 0.8) * 0.055;
-      head.rotation.y = damp(
-        head.rotation.y,
-        present * 0.2 + (reduced ? 0 : pointer.x * 0.24),
-        dt,
+      const present = drive("present", presentTarget);
+      if (pose === "present" && !reduced && pointerIdle >= 2.5)
+        gaze.lerp(new THREE.Vector2(0.75, 0.05), present * 0.6);
+
+      const flying = reduced ? 0 : Math.max(flight, celebration);
+      const trail = reduced ? 0 : Math.min(1, walking);
+      // Slow breathing (about 3.6 s) with a drifting layer on top.
+      const breathPhase = t * Math.PI * 2 * 0.28;
+      const breath = reduced ? 0 : Math.sin(breathPhase);
+      const hover = reduced ? 0 : breath * 0.055 + drift(t * 0.6, 1) * 0.025;
+      const follow = (lag: number) =>
+        reduced ? 0 : Math.sin(breathPhase - lag);
+
+      body.position.y = -0.66 + hover + flying * 0.12 - anticipation * 0.03;
+      body.rotation.x = drive("bodyPitch", -flying * 0.2 - trail * 0.06);
+      const headYaw = gaze.x * 0.4 + present * 0.1;
+      torso.rotation.y = drive("torsoYaw", headYaw * 0.3);
+      torso.rotation.z = drive(
+        "torsoRoll",
+        reduced ? 0 : drift(t * 0.45, 2) * 0.022,
       );
-      head.rotation.x = damp(
-        head.rotation.x,
-        -flying * 0.16 + (reduced ? 0 : -pointer.y * 0.11),
-        dt,
+      torso.rotation.x = -breath * 0.015;
+      head.rotation.y = drive("headYaw", headYaw);
+      head.rotation.x = drive("headPitch", -gaze.y * 0.18 - flying * 0.14);
+      head.rotation.z = drive(
+        "headRoll",
+        -present * 0.06 -
+          raise * 0.08 +
+          (reduced ? 0 : drift(t * 0.5, 3) * 0.035),
       );
-      head.rotation.z = damp(
-        head.rotation.z,
-        -present * 0.06 + (reduced ? 0 : Math.sin(t * 0.8) * 0.06),
-        dt,
-      );
-      const blinkTime = t % 4.9;
-      const blink =
-        !reduced && blinkTime > 4.48 && blinkTime < 4.82
-          ? 1 - Math.sin(((blinkTime - 4.48) / 0.34) * Math.PI) * 0.95
-          : 1;
+      const blink = reduced
+        ? 1
+        : Math.min(
+            lid(t - blinkStart),
+            doubleBlink ? lid(t - blinkStart - 0.3) : 1,
+          );
       eyes.forEach((eye) => {
         eye.scale.y = blink;
       });
+      const eyeX = drive("eyeX", 0.08 + gaze.x * 0.105);
+      const eyeY = drive("eyeY", 0.1 + gaze.y * 0.075);
       pupils.forEach((eye) => {
-        eye.position.x = 0.08 + (reduced ? 0 : pointer.x * 0.105);
-        eye.position.y = 0.1 + (reduced ? 0 : pointer.y * 0.075);
+        eye.position.x = eyeX;
+        eye.position.y = eyeY;
       });
-      leftArm.shoulder.rotation.z = damp(
-        leftArm.shoulder.rotation.z,
-        0.34 + present * 0.9 + wave * 1.5 + flying * 0.6,
-        dt,
+
+      leftArm.shoulder.rotation.z = drive(
+        "leftShoulderZ",
+        0.34 +
+          present * 0.95 +
+          raise * 1.9 -
+          anticipation * 0.12 +
+          flying * 0.5 +
+          follow(0.7) * 0.03,
       );
-      leftArm.shoulder.rotation.x = damp(
-        leftArm.shoulder.rotation.x,
-        -0.22 - flying * 0.8,
-        dt,
+      leftArm.shoulder.rotation.x = drive(
+        "leftShoulderX",
+        -0.22 - flying * 0.75 - present * 0.15,
       );
-      leftArm.elbow.rotation.z = damp(
-        leftArm.elbow.rotation.z,
-        0.12 + present * 0.45 + wave * (0.8 + Math.sin(t * 9) * 0.3),
-        dt,
+      leftArm.elbow.rotation.z = drive(
+        "leftElbowZ",
+        0.12 +
+          present * 0.5 +
+          raise * 0.7 +
+          waving * Math.sin(wavePhase) * 0.32,
       );
-      leftArm.elbow.rotation.x = damp(
-        leftArm.elbow.rotation.x,
-        -0.35 - flying * 0.7,
-        dt,
+      leftArm.elbow.rotation.x = drive("leftElbowX", -0.35 - flying * 0.6);
+      leftArm.wrist.rotation.z = drive(
+        "leftWristZ",
+        waving * Math.sin(wavePhase - 0.9) * 0.38 + present * 0.15,
       );
-      leftArm.wrist.rotation.z = wave * Math.sin(t * 9) * 0.3;
-      leftArm.hand.rotation.y = -present * 0.3;
-      rightArm.shoulder.rotation.z = damp(
-        rightArm.shoulder.rotation.z,
-        -0.3 - flying * 0.65 + (reduced ? 0 : Math.sin(t * 1.6) * 0.06),
-        dt,
+      leftArm.hand.rotation.y = drive("leftHandY", -present * 0.35);
+      rightArm.shoulder.rotation.z = drive(
+        "rightShoulderZ",
+        -0.3 - flying * 0.55 - follow(0.7) * 0.03,
       );
-      rightArm.shoulder.rotation.x = damp(
-        rightArm.shoulder.rotation.x,
-        -0.2 - flying * 0.8 - stride * 0.2,
-        dt,
+      rightArm.shoulder.rotation.x = drive(
+        "rightShoulderX",
+        -0.2 - flying * 0.75,
       );
-      rightArm.elbow.rotation.x = damp(
-        rightArm.elbow.rotation.x,
-        -0.4 - flying * 0.55,
-        dt,
+      rightArm.elbow.rotation.x = drive("rightElbowX", -0.4 - flying * 0.5);
+      leftLeg.hip.rotation.x = drive(
+        "leftHipX",
+        0.16 + flying * 0.75 + trail * 0.25 + follow(1.1) * 0.03,
       );
-      leftLeg.hip.rotation.x = damp(
-        leftLeg.hip.rotation.x,
-        0.16 + flying * 0.8 + stride * 0.2,
-        dt,
+      rightLeg.hip.rotation.x = drive(
+        "rightHipX",
+        -0.16 + flying * 0.4 + trail * 0.18 + follow(1.3) * 0.03,
       );
-      rightLeg.hip.rotation.x = damp(
-        rightLeg.hip.rotation.x,
-        -0.16 + flying * 0.4 - stride * 0.2,
-        dt,
+      leftLeg.knee.rotation.x = drive(
+        "leftKneeX",
+        -0.25 - flying * 1.25 - trail * 0.2,
       );
-      leftLeg.knee.rotation.x = damp(
-        leftLeg.knee.rotation.x,
-        -0.25 - flying * 1.2,
-        dt,
-      );
-      rightLeg.knee.rotation.x = damp(
-        rightLeg.knee.rotation.x,
-        -0.16 - flying * 0.85,
-        dt,
+      rightLeg.knee.rotation.x = drive(
+        "rightKneeX",
+        -0.16 - flying * 0.95 - trail * 0.15,
       );
       leftLeg.hip.rotation.z = -0.1;
       rightLeg.hip.rotation.z = 0.14;
-      shadow.visible = pose !== "hero" && !flying;
+      shadow.visible = pose !== "hero" && flying < 0.05;
+      const glow = drive("glow", flying * 0.7);
       cyan.emissiveIntensity = reduced
         ? 1.4
-        : 1.5 + flying * 0.8 + Math.sin(t * 1.5) * 0.12;
-      thrusters.forEach((jet) => (jet.scale.y = 1 + flying * 4));
+        : 1.45 + glow + Math.sin(t * Math.PI * 2 * 0.25) * 0.1;
+      thrusters.forEach((jet) => (jet.scale.y = 1 + glow * 1.1));
     },
     dispose() {
       geometries.forEach((geometry) => geometry.dispose());
