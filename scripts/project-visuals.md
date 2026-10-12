@@ -1,6 +1,6 @@
 # Portfolio product visuals
 
-All 18 projects have studio covers and animated product showcases in their
+All 19 projects have studio covers and animated product showcases in their
 detail dialogs. Only Nudge, Nivra, Recurr, and NotchMeter appear in the four
 featured scrolling chapters. Project facts, gallery images, cover paths, and
 case-study copy live in `src/components/portfolio/projects.data.ts`.
@@ -16,6 +16,23 @@ owner's request because it read as AI-made; do not bring it back.
 The original three folders contain a `cover.jpg` render of the complete
 composition. The other 15 folders contain `cover-v1.jpg`. Product interfaces
 are source-derived layers.
+
+LocalMesh adds a studio-dark `cover-studio-dark.jpg` and native SVG
+illustrations in `src/assets/projects/localmesh/`: `network.svg`, `routing.svg`,
+and `security.svg`. These are architecture illustrations derived from
+`~/Projects/LocalMesh/README.md`, its topology dashboard source, and documented
+scheduler/gateway/enrollment behavior. They are not screenshots or live fleet
+telemetry. Each inference request runs wholly on one node; no model sharding
+or pooled VRAM is implied. Unrelated PNGs in the source checkout are not used.
+
+`render-localmesh-visuals.mjs` builds the diagrams and rasterizes their cover
+through Sharp without browser automation. Run `node scripts/render-localmesh-visuals.mjs`,
+passing `--sharp-module /path/to/sharp` if Sharp is outside this repo. The runtime
+stage uses the shared CSS studio backdrop, the same network SVG, a floating
+gateway card, and a routing scan that pauses offscreen and under reduced motion.
+Earlier generated LocalMesh artwork is preserved as unused local drafts and
+excluded from committed assets. For a browser export using the exact site fonts,
+use `render-project-covers.tsx` when the Helium MCP tools are available.
 
 - `src/assets/projects/nudge/`: the original app icon and
   `island.jpg`, `lock.jpg`, `reminders.jpg`. These are screenshots of the `.screen`

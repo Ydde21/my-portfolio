@@ -12,7 +12,7 @@ import { projects } from "./projects.data";
 
 afterEach(cleanup);
 describe("project browsing", () => {
-  it("keeps all 18 real projects discoverable and filters by platform", async () => {
+  it("keeps all 19 real projects discoverable and filters by platform", async () => {
     render(<WorkSection />);
     const collection = screen.getByRole("region", {
       name: "More ideas. More possibilities.",
@@ -24,6 +24,7 @@ describe("project browsing", () => {
         }),
       ).toBeInTheDocument(),
     );
+    expect(collection.querySelectorAll(".project-tile")).toHaveLength(19);
     fireEvent.click(within(collection).getByRole("button", { name: "Mobile" }));
     await waitFor(() =>
       expect(collection.querySelectorAll(".project-tile")).toHaveLength(2),
@@ -42,6 +43,30 @@ describe("project browsing", () => {
       within(collection).getByRole("button", { name: "Explore NotchMeter" }),
     ).toBeInTheDocument();
     expect(within(collection).getByRole("button", { name: "Explore Nivra" })).toBeInTheDocument();
+    fireEvent.click(within(collection).getByRole("button", { name: "Web" }));
+    await waitFor(() => expect(collection.querySelectorAll(".project-tile")).toHaveLength(15));
+    expect(within(collection).getByRole("button", { name: "Explore LocalMesh" })).toBeInTheDocument();
+  });
+
+  it("opens LocalMesh's source-backed case study and labels its gallery as diagrams", async () => {
+    render(<WorkSection />);
+    const collection = screen.getByRole("region", { name: "More ideas. More possibilities." });
+    const tile = within(collection).getByRole("button", { name: "Explore LocalMesh" });
+    tile.focus();
+    fireEvent.click(tile);
+    const dialog = screen.getByRole("dialog", { name: "LocalMesh" });
+    expect(dialog).toHaveTextContent("not dashboard screenshots or live fleet telemetry");
+    expect(dialog).toHaveTextContent("does not shard models or pool VRAM");
+    expect(within(dialog).getByRole("link", { name: "View source: LocalMesh" })).toHaveAttribute("href", "https://github.com/Ydde21/LocalMesh");
+    const gallery = dialog.querySelector(".dialog-gallery > img")!;
+    expect(gallery).toHaveAttribute("alt", expect.stringContaining("not live fleet telemetry"));
+    fireEvent.click(within(dialog).getByRole("button", { name: "Next diagram of LocalMesh" }));
+    expect(gallery).toHaveAttribute("alt", expect.stringContaining("routing diagram"));
+    fireEvent.click(within(dialog).getByRole("button", { name: "Next diagram of LocalMesh" }));
+    expect(gallery).toHaveAttribute("alt", expect.stringContaining("security diagram"));
+    fireEvent.click(within(dialog).getByRole("button", { name: "Close project" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(tile).toHaveFocus();
   });
 
   it("navigates the four featured chapters and opens the new case studies", async () => {

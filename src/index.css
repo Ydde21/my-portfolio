@@ -2635,5 +2635,17 @@ html:not([data-robot-ready="true"]) .companion-touch {
   .collection-product .studio-journey { font-size: 1.4cqw; }
 }
 
+.mesh-map { position: absolute; top: 36%; left: 6.4%; width: 74%; border-radius: 12px; overflow: hidden; border: 1px solid #7a9ad533; box-shadow: 12px 24px 45px #0008; transform: perspective(1200px) rotateY(-5deg) rotateZ(-3deg); }
+.mesh-map > img { display: block; width: 100%; }
+.mesh-route-trace { position: absolute; inset-block: 10%; left: 0; width: 1px; background: linear-gradient(transparent, #91b9ff70, transparent); box-shadow: 0 0 12px #6b9eff40; animation: replay-scan 9s linear infinite; }
+.mesh-gateway { position: absolute; z-index: 3; top: 62%; right: 4%; width: 42%; padding: 2.4%; border: 1px solid #7093ca70; border-radius: 14px; color: #e8eefb; background: linear-gradient(135deg, #101e33, #0a101c); box-shadow: 10px 22px 40px #0008; font-family: "IBM Plex Mono", monospace; transform: rotate(3deg); animation: studio-card-drift 8s ease-in-out infinite; }
+.mesh-gateway > span { display: block; color: #91b0e8; font-size: 1cqw; letter-spacing: .04em; }
+.mesh-gateway > strong { display: block; margin-top: 2cqw; font-size: 1.7cqw; font-weight: 400; white-space: nowrap; }
+.mesh-gateway > p { margin-top: 1.3cqw; color: #9cafcd; font-size: 1.4cqw; }
+.mesh-gateway > small { display: block; margin-top: 1.7cqw; color: #7794bf; font-size: 1cqw; letter-spacing: .04em; }
+@media (max-width: 767px) {
+  .mesh-map { border-radius: 6px; }
+  .mesh-gateway { border-radius: 7px; }
+}
 .product-showcase * { animation-play-state: paused; }
 .product-showcase.is-playing * { animation-play-state: running; }

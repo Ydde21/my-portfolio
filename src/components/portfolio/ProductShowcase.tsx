@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { ArrowUpRight, Bell, BookOpen, Calculator, Check, Clock3, Coins, Command, Gauge, GitBranch, GitPullRequest, HeartPulse, Hotel, Layers, Megaphone, MessagesSquare, Plane, Receipt, RotateCcw, Sparkles, Timer, WalletCards } from "lucide-react";
+import { ArrowUpRight, Bell, BookOpen, Box, Calculator, Check, Clock3, Coins, Command, Gauge, GitBranch, GitPullRequest, HeartPulse, Hotel, Layers, Megaphone, MessagesSquare, Plane, Receipt, RotateCcw, Sparkles, Timer, WalletCards } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useMediaQuery";
 import { getProjectImages, type PortfolioProject, type ProjectScreenshot } from "./projects.data";
 
@@ -9,6 +9,7 @@ const brandMarks = {
   procuredesk: GitPullRequest, cliniqo: HeartPulse, timepay: Timer, paymatrix: Layers,
   sulitflight: Plane, mineflow: MessagesSquare, adforge: Megaphone, servicepass: BookOpen,
   presyopro: Calculator, savvywallet: Coins, aniverse: Sparkles,
+  localmesh: Box,
 };
 
 function StudioWindow({ image, label, className = "" }: {
@@ -30,6 +31,20 @@ function CollectionComposition({ project }: { project: PortfolioProject }) {
   const secondary = images[studio.secondary ?? 1];
   const composition = studio.composition;
   if (!composition) return null;
+  if (composition === "mesh") return (
+    <div className="collection-product collection-mesh">
+      <div className="mesh-map">
+        <img src={primary.src} alt="" loading="lazy" />
+        <span className="mesh-route-trace" />
+      </div>
+      <div className="mesh-gateway">
+        <span>OPENAI-COMPATIBLE GATEWAY</span>
+        <strong>POST /v1/chat/completions</strong>
+        <p>SDK → gateway → local node</p>
+        <small>PRIVATE / SELF-HOSTED</small>
+      </div>
+    </div>
+  );
   if (composition === "mobile") return (
     <div className="collection-product collection-mobile">
       {[secondary, primary, images[2]].map((image, index) => (

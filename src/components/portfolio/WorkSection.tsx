@@ -74,6 +74,7 @@ function ProjectDetails({
   const title = project?.title;
   // A keyed content tree below resets the screenshot when a new project opens.
   const images = project ? getImages(project) : [];
+  const imageNoun = images.length > 0 && images.every((image) => image.kind === "diagram") ? "diagram" : "screenshot";
   return (
     <Dialog.Root
       open={Boolean(project)}
@@ -129,7 +130,7 @@ function ProjectDetails({
                           (i) => (i - 1 + images.length) % images.length,
                         )
                       }
-                      aria-label={`Previous screenshot of ${project.title}`}
+                      aria-label={`Previous ${imageNoun} of ${project.title}`}
                     >
                       <ChevronLeft size={18} />
                     </button>
@@ -141,7 +142,7 @@ function ProjectDetails({
                       onClick={() =>
                         setImageIndex((i) => (i + 1) % images.length)
                       }
-                      aria-label={`Next screenshot of ${project.title}`}
+                      aria-label={`Next ${imageNoun} of ${project.title}`}
                     >
                       <ChevronRight size={18} />
                     </button>

@@ -61,6 +61,10 @@ import recurrCover from "@/assets/projects/recurr/cover.jpg";
 import recurrTimeline from "@/assets/projects/recurr/timeline.jpg";
 import recurrFlow from "@/assets/projects/recurr/flow.jpg";
 import recurrDiff from "@/assets/projects/recurr/diff.jpg";
+import localmeshCover from "@/assets/projects/localmesh/cover-studio-dark.jpg";
+import localmeshNetwork from "@/assets/projects/localmesh/network.svg";
+import localmeshRouting from "@/assets/projects/localmesh/routing.svg";
+import localmeshSecurity from "@/assets/projects/localmesh/security.svg";
 
 import notchmeterCover from "@/assets/projects/notchmeter/cover-v1.jpg";
 import savewiseCover from "@/assets/projects/savewise/cover-v1.jpg";
@@ -83,6 +87,7 @@ export type ProjectKind = "web" | "mobile";
 export interface ProjectScreenshot {
   src: string;
   alt: string;
+  kind?: "diagram";
 }
 
 export interface ProjectLinkSet {
@@ -98,7 +103,7 @@ interface BaseProject {
   category?: "Desktop";
   showcase?: {
     identity: string;
-    composition?: "notch" | "mobile" | "editorial" | "invoice" | "workflow" | "dashboard" | "stack" | "campaign" | "calculator" | "gallery";
+    composition?: "notch" | "mobile" | "editorial" | "invoice" | "workflow" | "dashboard" | "stack" | "campaign" | "calculator" | "gallery" | "mesh";
     tone: string;
     icon?: string;
     cover?: string;
@@ -212,6 +217,35 @@ export const projects: PortfolioProject[] = [
       challenge: "A production failure is a sequence of events. Reconstructing that sequence from the final error alone makes local reproduction difficult.",
       approach: "The capture SDK records dependencies and deterministic inputs, redacting secrets before persistence. Replay serves recorded responses inside an isolated process. The developer workspace exposes timelines, flow graphs, and diffs; saved scenarios check whether a fixed build changes the outcome.",
       previewNote: "Screenshots captured from the actual Recurr UI using its local checkout demo. The 500 and 202 responses are demo outcomes, not portfolio performance metrics.",
+    },
+  },
+  {
+    title: "LocalMesh",
+    description: "A self-hosted, distributed AI platform that connects macOS, Linux, and Windows devices behind one OpenAI-compatible inference endpoint. Hardware-aware scheduling routes each request to an eligible node, while a real-time dashboard tracks devices, models, workloads, and routing decisions. Agents use mTLS and admin-approved enrollment; prompts and completions are not persisted.",
+    kind: "web",
+    domain: "AI Infrastructure",
+    highlights: [
+      "OpenAI-compatible gateway with explainable scheduling",
+      "Cross-platform agents with mTLS & approved enrollment",
+      "Live device topology, model management & workloads",
+    ],
+    images: [
+      { src: localmeshNetwork, kind: "diagram", alt: "LocalMesh architecture illustration connecting MacBook, Linux GPU, and Windows agents to the control plane and a single OpenAI-compatible endpoint; not live fleet telemetry" },
+      { src: localmeshRouting, kind: "diagram", alt: "LocalMesh routing diagram showing an OpenAI SDK request passing through hardware-aware scheduling to one eligible device, with the documented scheduling factors" },
+      { src: localmeshSecurity, kind: "diagram", alt: "LocalMesh security diagram showing device enrollment, admin approval, mTLS connections, scoped API keys, and metadata-only persistence" },
+    ],
+    repoUrl: "https://github.com/Ydde21/LocalMesh",
+    showcase: {
+      identity: "localmesh", composition: "mesh", tone: "#93b5ff",
+      cover: localmeshCover,
+      edition: "SELF-HOSTED / AI INFRASTRUCTURE",
+      headline: "Your hardware.\nOne AI network.",
+      footer: "PRIVATE DEVICES · ONE COMPATIBLE ENDPOINT",
+    },
+    caseStudy: {
+      challenge: "Local models can be scattered across several computers, each with different hardware and available resources. Applications need a single way to reach an eligible device without managing every machine separately.",
+      approach: "Cross-platform agents report hardware, model availability, and health to a self-hosted control plane. The gateway exposes an OpenAI-compatible API, and the scheduler explains its per-request choice using resources, load, latency, and queue depth. Model installation and removal are managed through the dashboard. Each inference request runs wholly on one node; LocalMesh does not shard models or pool VRAM across devices.",
+      previewNote: "Architecture illustrations derived from LocalMesh's README, dashboard source, and agent/gateway contracts. These diagrams explain the system; they are not dashboard screenshots or live fleet telemetry.",
     },
   },
   {

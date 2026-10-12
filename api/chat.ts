@@ -49,6 +49,7 @@ Projects:
 - Nudge (iOS): Dynamic Island-first reminders with Live Activities, Lock Screen Done/snooze actions, recurring local notifications, and on-device SwiftData storage. Featured project; no public store or release link is provided.
 - Nivra (macOS): notch attention utility that ranks calendar events, local coding-agent activity, and GitHub CI failures on-device, surfacing one priority item with a hover queue and contextual actions; https://nivra-dev.vercel.app ; source https://github.com/Ydde21/Nivra
 - Recurr (web / Node.js developer tooling): open-source production incident capture, deterministic local replay, execution diffs, and saved regression scenarios to verify fixes; https://recurr-dev.vercel.app ; source https://github.com/Ydde21/recurr
+- LocalMesh (self-hosted AI infrastructure): connects macOS, Linux, and Windows agents behind one OpenAI-compatible endpoint; explainable hardware-aware scheduling, mTLS and approved device enrollment, live topology, model management, and workloads. Each inference request runs wholly on one eligible node; it does not shard models or pool VRAM. Portfolio previews are labeled architecture diagrams, not live fleet telemetry. Source: https://github.com/Ydde21/LocalMesh
 - NotchMeter (macOS): notch overlay showing AI subscription usage for Claude, ChatGPT, and Cursor; https://github.com/Ydde21/NotchMeter
 - SaveWise (mobile): financial tracker; https://github.com/Ydde21/SaveWise/releases/tag/SaveWise ; case study https://savvy-wallet.lovable.app
 - Haven Harmony: hotel management system; https://havenharmony.lovable.app
@@ -89,6 +90,7 @@ const SCOPE_TERMS = [
   "nudge",
   "nivra",
   "recurr",
+  "localmesh",
   "notchmeter",
   "savewise",
   "haven harmony",
